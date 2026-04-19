@@ -114,7 +114,8 @@ function Sidebar({ onClose, badgeCounts, onDismiss }: { onClose?: () => void; ba
   async function logout() {
     // Clear the HTTP-only cookie via API
     await fetch('/api/admin/auth', { method: 'DELETE' }).catch(() => {})
-    router.push('/admin')
+    // Hard redirect — forces middleware to re-run and verify no cookie exists
+    window.location.replace('/admin')
   }
 
   return (
