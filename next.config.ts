@@ -70,13 +70,6 @@ const nextConfig: NextConfig = {
     ]
   },
 
-  // ── Redirects ────────────────────────────────────────────────────────────────
-  async redirects() {
-    return [
-      // Trailing slash normalization
-      { source: '/admin', destination: '/admin/dashboard', permanent: false },
-    ]
-  },
 }
 
 export default nextConfig

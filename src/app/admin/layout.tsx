@@ -197,19 +197,9 @@ function Sidebar({ onClose, badgeCounts, onDismiss }: { onClose?: () => void; ba
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const router   = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
   const isLogin = pathname === '/admin'
   const { counts: badgeCounts, dismiss: dismissBadge } = useBadgeCounts()
-
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Auth check is handled server-side by middleware.ts
-  // No client-side redirect needed — middleware redirects unauthenticated requests
 
   if (isLogin) return <AdminProvider>{children}</AdminProvider>
 
