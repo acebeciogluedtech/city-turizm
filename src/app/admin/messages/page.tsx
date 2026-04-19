@@ -205,7 +205,7 @@ export default function MessagesPage() {
                     <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                       msg.source === 'contact' ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-600'
                     }`}>
-                      {sourceLabel[msg.source] || msg.source}
+                      {sourceLabel[msg.source ?? ''] || msg.source}
                     </span>
                     <span className="text-gray-400 text-xs">{timeAgo(msg.created_at)}</span>
                     {expanded === msg.id ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -238,7 +238,7 @@ export default function MessagesPage() {
                           <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">{msg.message}</p>
                         </div>
                         <div className="flex items-center gap-2 justify-end">
-                          <button onClick={() => toggleRead(msg.id, msg.is_read)}
+                          <button onClick={() => toggleRead(msg.id, !!msg.is_read)}
                             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 hover:bg-gray-100 transition-all">
                             {msg.is_read ? <><EyeOff className="w-3 h-3" /> Okunmadı İşaretle</> : <><Eye className="w-3 h-3" /> Okundu İşaretle</>}
                           </button>

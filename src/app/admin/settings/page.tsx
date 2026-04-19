@@ -564,7 +564,7 @@ export default function SettingsPage() {
             </button>
           ) : (
             <AnimatePresence>
-              <motion.div initialOpacity={0} {...{ initial: { opacity: 0, height: 0 }, animate: { opacity: 1, height: 'auto' }, exit: { opacity: 0, height: 0 } }}
+              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
                 className="border border-amber-200 bg-amber-50/30 rounded-xl p-5 space-y-4 overflow-hidden">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-bold text-gray-800">Yeni Admin Kullanıcı</p>

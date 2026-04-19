@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     }
 
     // Purge ISR cache so updated content shows on next page request
-    revalidateTag('page-content')
+    try { (revalidateTag as (tag: string) => void)('page-content') } catch {}
 
     return NextResponse.json({ success: true, count: records.length })
   } catch (error: any) {

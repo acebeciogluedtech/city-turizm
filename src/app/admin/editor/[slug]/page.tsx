@@ -3181,7 +3181,7 @@ function PTStatsPreview({ g, isSel, onSel, pageId, sectionId }: { g: GetVal; isS
     <div className="grid grid-cols-2 gap-2">
       {[1,2,3,4].map(n => (
         <div key={n} className="bg-gray-900 rounded-xl p-3 space-y-1">
-          <BizKimizIconPicker value={g(`st${n}_icon`) || 'Star'} onChange={() => {}} pageId={pageId} sectionId={sectionId} fieldId={`st${n}_icon`} />
+          <BizKimizIconPicker g={g} pageId={pageId} sectionId={sectionId} fieldId={`st${n}_icon`} />
           <E active={isSel(`st${n}_val`)} onSelect={() => onSel(`st${n}_val`)}>
             <p className="text-xl font-black text-white">{g(`st${n}_val`) || '—'}</p>
           </E>
@@ -3254,7 +3254,7 @@ function PTFeaturesPreview({ g, isSel, onSel, pageId, sectionId }: { g: GetVal; 
         {[1,2,3,4,5,6].map(n => (
           <div key={n} className="bg-white border border-gray-100 rounded-xl p-3 hover:border-amber-200 transition-colors space-y-1">
             <div className="flex items-center gap-2">
-              <BizKimizIconPicker value={g(`f${n}_icon`) || 'Star'} onChange={() => {}} pageId={pageId} sectionId={sectionId} fieldId={`f${n}_icon`} />
+              <BizKimizIconPicker g={g} pageId={pageId} sectionId={sectionId} fieldId={`f${n}_icon`} />
               <E active={isSel(`f${n}_title`)} onSelect={() => onSel(`f${n}_title`)}>
                 <p className="font-bold text-gray-900 text-sm">{g(`f${n}_title`) || `Özellik ${n}`}</p>
               </E>
@@ -3848,11 +3848,10 @@ function KKArticlesPreview({ g, isSel, onSel, pageId, sectionId }: { g: GetVal; 
   return (
     <div className="space-y-2">
       {Array.from({length: 7}, (_, i) => i + 1).map(n => {
-        const iconName = g(`a${n}_icon`) || 'FileText'
         return (
           <div key={n} className="bg-white border border-gray-100 rounded-xl p-3 hover:border-amber-200 transition-colors">
             <div className="flex items-start gap-2 mb-1.5">
-              <BizKimizIconPicker value={iconName} onChange={() => {}} pageId={pageId} sectionId={sectionId} fieldId={`a${n}_icon`} />
+              <BizKimizIconPicker g={g} pageId={pageId} sectionId={sectionId} fieldId={`a${n}_icon`} />
               <E active={isSel(`a${n}_title`)} onSelect={() => onSel(`a${n}_title`)}>
                 <p className="font-black text-gray-900 text-lg">{g(`a${n}_title`) || `Madde ${n}`}</p>
               </E>
@@ -3893,11 +3892,10 @@ function CPPurposesPreview({ g, isSel, onSel, pageId, sectionId }: { g: GetVal; 
       </E>
       <div className="grid grid-cols-2 gap-2">
         {[1,2,3,4,5,6].map(n => {
-          const iconName = g(`p${n}_icon`) || 'Eye'
           return (
             <div key={n} className="bg-white border border-gray-100 rounded-xl p-3 hover:border-amber-200 transition-colors space-y-1.5">
               <div className="flex items-center gap-2">
-                <BizKimizIconPicker value={iconName} onChange={(v) => {}} pageId={pageId} sectionId={sectionId} fieldId={`p${n}_icon`} />
+                <BizKimizIconPicker g={g} pageId={pageId} sectionId={sectionId} fieldId={`p${n}_icon`} />
                 <E active={isSel(`p${n}_title`)} onSelect={() => onSel(`p${n}_title`)}>
                   <p className="font-bold text-gray-900 text-sm">{g(`p${n}_title`) || `Kart ${n}`}</p>
                 </E>
@@ -4382,7 +4380,7 @@ export default function EditorPage() {
   const previewRef  = useRef<HTMLDivElement>(null)
 
   // Getter: liveEdit → store → definitions fallback (content is never empty)
-  function g(sectionId: string, fieldId: string): string {
+  function g(sectionId: string, fieldId: string, fallback = ''): string {
     // Icon and image fields are language-independent — always read TR
     const isLangIndependent = fieldId.endsWith('_icon') || fieldId.endsWith('_img') || fieldId.startsWith('hero_img') || fieldId.startsWith('logo')
     const lang = isLangIndependent ? 'tr' : activeLang
@@ -4400,7 +4398,7 @@ export default function EditorPage() {
     // Only fall back to definition default if the field was never set
     const sec = page!.sections.find(s => s.id === sectionId)
     const fld = sec?.fields.find(f => f.id === fieldId)
-    return (lang === 'tr' ? fld?.tr : fld?.en) ?? fld?.tr ?? ''
+    return (lang === 'tr' ? fld?.tr : fld?.en) ?? fld?.tr ?? fallback
   }
 
   function handleSelect(sectionId: string, fieldId: string) {

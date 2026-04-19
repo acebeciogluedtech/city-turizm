@@ -82,7 +82,7 @@ function JobCard({ a, onClick }: { a: Announcement; onClick: () => void }) {
   )
 }
 
-function AnnouncementCard({ a, onClick, categories }: { a: Announcement; onClick: () => void; categories: typeof categoriesTR }) {
+function AnnouncementCard({ a, onClick, categories }: { a: Announcement; onClick: () => void; categories: { key: string; icon: React.ElementType; color: string }[] }) {
   const catMeta = categories.find(c => c.key === a.category)
   const CatIcon = catMeta?.icon ?? Megaphone
   const catColor = catMeta?.color ?? 'bg-gray-100 text-gray-700'
