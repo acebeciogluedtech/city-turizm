@@ -1,7 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   User, Mail, Phone, Calendar, GraduationCap, Upload, MapPin,
@@ -310,8 +309,7 @@ function SubmitBtn({ label, loading }: { label: string; loading?: boolean }) {
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-function BasvuruPageInner() {
-  const searchParams = useSearchParams()
+export default function BasvuruPage() {
   const [selected, setSelected] = useState<Category | null>(null)
   const [submitted, setSubmitted] = useState(false)
   const { lang } = useLanguage()
@@ -325,11 +323,11 @@ function BasvuruPageInner() {
   ]
 
   useEffect(() => {
-    const kat = searchParams.get('kategori')
+    const kat = new URLSearchParams(window.location.search).get('kategori')
     if (kat && ['genel','arac','rehber','surucu'].includes(kat)) {
       setSelected(kat as Category)
     }
-  }, [searchParams])
+  }, [])
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -486,10 +484,3 @@ function BasvuruPageInner() {
   )
 }
 
-export default function BasvuruPage() {
-  return (
-    <Suspense>
-      <BasvuruPageInner />
-    </Suspense>
-  )
-}
