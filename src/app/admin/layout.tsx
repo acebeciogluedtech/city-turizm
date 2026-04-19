@@ -111,10 +111,9 @@ function Sidebar({ onClose, badgeCounts, onDismiss }: { onClose?: () => void; ba
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
 
-  function logout() {
-    sessionStorage.removeItem('admin_auth')
-    sessionStorage.removeItem('admin_token')
-    sessionStorage.removeItem('admin_user')
+  async function logout() {
+    // Clear the HTTP-only cookie via API
+    await fetch('/api/admin/auth', { method: 'DELETE' }).catch(() => {})
     router.push('/admin')
   }
 
@@ -208,13 +207,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     setMounted(true)
   }, [])
 
-  useEffect(() => {
-    if (!mounted) return  // Wait for client-side hydration
-    if (!isLogin) {
-      const auth = sessionStorage.getItem('admin_auth')
-      if (!auth) router.replace('/admin')
-    }
-  }, [mounted, pathname, isLogin, router])
+  // Auth check is handled server-side by middleware.ts
+  // No client-side redirect needed — middleware redirects unauthenticated requests
 
   if (isLogin) return <AdminProvider>{children}</AdminProvider>
 

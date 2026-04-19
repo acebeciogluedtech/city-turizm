@@ -32,9 +32,7 @@ export default function AdminLogin() {
         setLoading(false)
         return
       }
-      sessionStorage.setItem('admin_auth', '1')
-      sessionStorage.setItem('admin_token', data.session?.access_token ?? '')
-      sessionStorage.setItem('admin_user', JSON.stringify(data.user))
+      // Token is now set as HTTP-only cookie by the API — no client-side storage needed
       router.push('/admin/dashboard')
     } catch {
       setError('Bağlantı hatası. Lütfen tekrar deneyin.')
