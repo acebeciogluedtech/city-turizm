@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -310,7 +310,7 @@ function SubmitBtn({ label, loading }: { label: string; loading?: boolean }) {
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default function BasvuruPage() {
+function BasvuruPageInner() {
   const searchParams = useSearchParams()
   const [selected, setSelected] = useState<Category | null>(null)
   const [submitted, setSubmitted] = useState(false)
@@ -483,5 +483,13 @@ export default function BasvuruPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function BasvuruPage() {
+  return (
+    <Suspense>
+      <BasvuruPageInner />
+    </Suspense>
   )
 }
