@@ -69,7 +69,7 @@ export default function AracFilosuClient({ initialContent }: { initialContent: B
     <main className="min-h-screen bg-white">
 
       {/* ── HERO ── */}
-      <div className="relative bg-gray-900 pt-36 pb-20 overflow-hidden" style={{ minHeight: 480 }}>
+      <div className="relative bg-gray-900 pt-28 sm:pt-36 pb-20 overflow-hidden" style={{ minHeight: 480 }}>
         {(
           <img
             src={v('hero', 'hero_img', '/arac-filosu-banner.jpg')}

@@ -42,7 +42,7 @@ export default function GizlilikGuvenlikClient({ initialContent }: { initialCont
     <main className="min-h-screen bg-white">
 
       {/* ── HERO ── */}
-      <div className="relative bg-gray-900 pt-36 pb-20 overflow-hidden" style={{ minHeight: 400 }}>
+      <div className="relative bg-gray-900 pt-28 sm:pt-36 pb-20 overflow-hidden" style={{ minHeight: 400 }}>
         {(
           <img
             src={v('hero', 'hero_img', '/city-bina.jpeg')}

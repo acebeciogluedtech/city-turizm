@@ -78,7 +78,7 @@ export default function KalitePolitikasiClient({ initialContent }: { initialCont
     <main className="min-h-screen bg-white">
 
       {/* ── HERO ── */}
-      <div className="relative bg-gray-900 pt-36 pb-20 overflow-hidden" style={{ minHeight: 420 }}>
+      <div className="relative bg-gray-900 pt-28 sm:pt-36 pb-20 overflow-hidden" style={{ minHeight: 420 }}>
         {(
           <img
             src={v('hero', 'hero_img', '/otobus-ic.png')}

@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>City Turizm — Teknik Spesifikasyon Dökümanı</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --amber: #f59e0b;
+    --amber-dark: #d97706;
+    --amber-light: #fef3c7;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --blue: #3b82f6;
+    --green: #10b981;
+    --purple: #8b5cf6;
+    --red: #ef4444;
+  }
+
+  html { font-size: 10pt; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--gray-800);
+    background: #fff;
+    line-height: 1.6;
+  }
+
+  /* ── Cover Page ── */
+  .cover {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: 200px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245,158,11,0.15);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: #fcd34d;
+    font-size: 8.5pt;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+  }
+
+  .cover h1 {
+    font-size: 48pt;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+    max-width: 700px;
+  }
+
+  .cover h1 span { color: var(--amber); }
+
+  .cover-desc {
+    font-size: 13pt;
+    color: #94a3b8;
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 48px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 36px;
+    margin-top: 8px;
+  }
+
+  .cover-meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .cover-meta-label { font-size: 7.5pt; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; }
+  .cover-meta-value { font-size: 10.5pt; color: #e2e8f0; font-weight: 600; }
+
+  .cover-logo {
+    position: absolute;
+    top: 56px; right: 80px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .cover-logo-icon {
+    width: 48px; height: 48px;
+    background: var(--amber);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22pt;
+    font-weight: 900;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(245,158,11,0.4);
+  }
+
+  .cover-logo-text { display: flex; flex-direction: column; }
+  .cover-logo-name { font-size: 13pt; font-weight: 800; color: #fff; line-height: 1.2; }
+  .cover-logo-sub { font-size: 8pt; color: #64748b; font-weight: 500; }
+
+  /* ── TOC ── */
+  .toc-page {
+    padding: 64px 80px;
+    page-break-after: always;
+  }
+
+  .section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 7.5pt;
+    font-weight: 700;
+    color: var(--amber-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 12px;
+  }
+
+  .section-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 16px; height: 2px;
+    background: var(--amber);
+    border-radius: 2px;
+  }
+
+  .toc-title {
+    font-size: 26pt;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -0.02em;
+    margin-bottom: 40px;
+  }
+
+  .toc-list { list-style: none; }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--gray-200);
+    gap: 12px;
+  }
+
+  .toc-item:last-child { border-bottom: none; }
+
+  .toc-item-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .toc-num {
+    width: 28px; height: 28px;
+    background: var(--amber-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8pt;
+    font-weight: 800;
+    color: var(--amber-dark);
+    flex-shrink: 0;
+  }
+
+  .toc-label { font-size: 10.5pt; font-weight: 600; color: var(--gray-700); }
+  .toc-sub { font-size: 8.5pt; color: var(--gray-400); margin-top: 1px; }
+  .toc-page-num { font-size: 9pt; color: var(--gray-400); font-weight: 600; }
+
+  /* ── Content Pages ── */
+  .page {
+    padding: 56px 80px;
+    page-break-after: always;
+  }
+
+  .page:last-child { page-break-after: auto; }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--gray-100);
+    margin-bottom: 40px;
+  }
+
+  .page-header-left { display: flex; flex-direction: column; gap: 4px; }
+
+  h2.section-title {
+    font-size: 22pt;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .page-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--amber-light);
+    color: var(--amber-dark);
+    font-size: 7.5pt;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  /* ── Prose ── */
+  p { font-size: 9.5pt; color: var(--gray-600); line-height: 1.75; margin-bottom: 12px; }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-top: 32px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  h3::before {
+    content: '';
+    display: inline-block;
+    width: 4px; height: 18px;
+    background: var(--amber);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  h4 {
+    font-size: 10pt;
+    font-weight: 700;
+    color: var(--gray-700);
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+
+  ul { list-style: none; margin-bottom: 16px; }
+
+  ul li {
+    font-size: 9.5pt;
+    color: var(--gray-600);
+    padding: 4px 0 4px 20px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--amber);
+    font-size: 8pt;
+    top: 5px;
+  }
+
+  /* ── Cards & Grids ── */
+  .card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-size: 10pt;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card p { margin-bottom: 0; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  /* ── Tech Stack Pills ── */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  .tech-item {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .tech-icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14pt;
+    flex-shrink: 0;
+  }
+
+  .tech-name { font-size: 9.5pt; font-weight: 700; color: var(--gray-800); }
+  .tech-version { font-size: 8pt; color: var(--gray-400); margin-top: 2px; }
+
+  /* ── Code blocks ── */
+  code {
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 8.5pt;
+    background: var(--gray-100);
+    color: var(--gray-700);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  pre {
+    background: #0f172a;
+    border-radius: 10px;
+    padding: 20px 24px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+
+  pre code {
+    background: none;
+    color: #e2e8f0;
+    font-size: 8pt;
+    padding: 0;
+    line-height: 1.8;
+    display: block;
+  }
+
+  .code-comment { color: #64748b; }
+  .code-key { color: #fbbf24; }
+  .code-val { color: #86efac; }
+  .code-type { color: #93c5fd; }
+  .code-str { color: #fca5a5; }
+
+  /* ── Table ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 8.5pt;
+  }
+
+  th {
+    background: var(--gray-800);
+    color: #fff;
+    font-weight: 700;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  th:first-child { border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background: var(--gray-50); }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 7.5pt;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 5px;
+    gap: 4px;
+  }
+
+  .badge-amber { background: var(--amber-light); color: var(--amber-dark); }
+  .badge-green { background: #d1fae5; color: #065f46; }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-purple { background: #ede9fe; color: #5b21b6; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-gray { background: var(--gray-100); color: var(--gray-600); }
+
+  /* ── DB Schema ── */
+  .db-table {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .db-table-header {
+    background: var(--gray-800);
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 9.5pt;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .db-table-icon {
+    width: 20px; height: 20px;
+    background: var(--amber);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9pt;
+  }
+
+  .db-col {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 16px;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 8.5pt;
+  }
+
+  .db-col:last-child { border-bottom: none; }
+  .db-col-name { font-weight: 600; color: var(--gray-800); width: 160px; flex-shrink: 0; }
+  .db-col-type { color: var(--blue); font-family: monospace; width: 100px; flex-shrink: 0; }
+  .db-col-desc { color: var(--gray-500); }
+
+  /* ── API Route cards ── */
+  .api-route {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  .method {
+    font-size: 7pt;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 5px;
+    flex-shrink: 0;
+    min-width: 44px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    margin-top: 1px;
+  }
+
+  .method-get { background: #d1fae5; color: #065f46; }
+  .method-post { background: #dbeafe; color: #1e40af; }
+  .method-patch { background: #ede9fe; color: #5b21b6; }
+  .method-delete { background: #fee2e2; color: #991b1b; }
+
+  .api-path { font-size: 8.5pt; font-weight: 700; color: var(--gray-800); font-family: monospace; }
+  .api-desc { font-size: 8pt; color: var(--gray-500); margin-top: 2px; }
+
+  /* ── Timeline ── */
+  .timeline { position: relative; padding-left: 28px; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 4px; bottom: 4px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--amber), var(--amber-light));
+    border-radius: 2px;
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px; top: 4px;
+    width: 10px; height: 10px;
+    background: var(--amber);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--amber);
+  }
+
+  .timeline-label {
+    font-size: 9pt;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 4px;
+  }
+
+  .timeline-desc { font-size: 8.5pt; color: var(--gray-500); line-height: 1.6; margin: 0; }
+
+  /* ── Fix item ── */
+  .fix-item {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+
+  .fix-file { font-size: 8pt; font-weight: 700; color: var(--amber-dark); font-family: monospace; margin-bottom: 4px; }
+  .fix-desc { font-size: 8.5pt; color: var(--gray-600); line-height: 1.6; margin: 0; }
+
+  /* ── Info box ── */
+  .info-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    gap: 12px;
+  }
+
+  .info-icon { font-size: 14pt; flex-shrink: 0; margin-top: 1px; }
+  .info-text { font-size: 9pt; color: #1e40af; line-height: 1.65; margin: 0; }
+
+  .warn-box {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    gap: 12px;
+  }
+
+  .warn-text { font-size: 9pt; color: #92400e; line-height: 1.65; margin: 0; }
+
+  /* ── Stat row ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .stat-box {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 18px 16px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 22pt;
+    font-weight: 900;
+    color: var(--amber-dark);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-lbl { font-size: 8pt; color: var(--gray-500); font-weight: 600; }
+
+  /* ── Footer ── */
+  .doc-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 80px;
+    border-top: 1px solid var(--gray-200);
+    font-size: 7.5pt;
+    color: var(--gray-400);
+    background: var(--gray-50);
+    margin-top: 40px;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 40px 56px; }
+    .cover { padding: 60px; min-height: 100vh; }
+    .toc-page { padding: 40px 56px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     KAPAK
+═══════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">
+    <div class="cover-logo-icon">C</div>
+    <div class="cover-logo-text">
+      <span class="cover-logo-name">City Turizm</span>
+      <span class="cover-logo-sub">cityturizm.com</span>
+    </div>
+  </div>
+
+  <div class="cover-badge">◆ Teknik Spesifikasyon Dökümanı</div>
+
+  <h1>City Turizm<br /><span>Web Platformu</span></h1>
+
+  <p class="cover-desc">
+    Next.js 16 tabanlı kurumsal turizm web sitesi ve tam özellikli yönetim panelinin
+    mimari tasarımı, veritabanı şeması, API katmanı ve tüm geliştirme sürecinin
+    kapsamlı teknik dokümantasyonu.
+  </p>
+
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Hazırlama Tarihi</span>
+      <span class="cover-meta-value">Nisan 2026</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Versiyon</span>
+      <span class="cover-meta-value">v1.0.0</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Framework</span>
+      <span class="cover-meta-value">Next.js 16.2.4</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Deployment</span>
+      <span class="cover-meta-value">Vercel + GitHub</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Veritabanı</span>
+      <span class="cover-meta-value">Supabase (PostgreSQL)</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     İÇİNDEKİLER
+═══════════════════════════════════════════════════════════════ -->
+<div class="toc-page">
+  <div class="section-eyebrow">İçindekiler</div>
+  <h2 class="toc-title">Döküman Yapısı</h2>
+
+  <ul class="toc-list">
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">1</div>
+        <div>
+          <div class="toc-label">Proje Genel Bakış</div>
+          <div class="toc-sub">Amaç, kapsam ve özet</div>
+        </div>
+      </div>
+      <span class="toc-page-num">03</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">2</div>
+        <div>
+          <div class="toc-label">Teknoloji Yığını</div>
+          <div class="toc-sub">Kullanılan kütüphaneler, framework ve araçlar</div>
+        </div>
+      </div>
+      <span class="toc-page-num">04</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">3</div>
+        <div>
+          <div class="toc-label">Dosya ve Dizin Yapısı</div>
+          <div class="toc-sub">Proje mimarisi ve route organizasyonu</div>
+        </div>
+      </div>
+      <span class="toc-page-num">05</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">4</div>
+        <div>
+          <div class="toc-label">Veritabanı Şeması</div>
+          <div class="toc-sub">Supabase tabloları, sütunlar ve RLS politikaları</div>
+        </div>
+      </div>
+      <span class="toc-page-num">06</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">5</div>
+        <div>
+          <div class="toc-label">API Katmanı</div>
+          <div class="toc-sub">REST endpoint'leri, metotlar ve açıklamaları</div>
+        </div>
+      </div>
+      <span class="toc-page-num">07</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">6</div>
+        <div>
+          <div class="toc-label">Site Sayfaları</div>
+          <div class="toc-sub">Kullanıcı arayüzü sayfaları ve bileşenleri</div>
+        </div>
+      </div>
+      <span class="toc-page-num">08</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">7</div>
+        <div>
+          <div class="toc-label">Admin Panel</div>
+          <div class="toc-sub">Yönetim paneli modülleri ve özellikleri</div>
+        </div>
+      </div>
+      <span class="toc-page-num">09</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">8</div>
+        <div>
+          <div class="toc-label">İçerik Yönetim Sistemi (CMS)</div>
+          <div class="toc-sub">Canlı editör mimarisi ve veri akışı</div>
+        </div>
+      </div>
+      <span class="toc-page-num">10</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">9</div>
+        <div>
+          <div class="toc-label">Başvuru Formları</div>
+          <div class="toc-sub">4 tip başvuru formu ve doküman yükleme</div>
+        </div>
+      </div>
+      <span class="toc-page-num">11</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">10</div>
+        <div>
+          <div class="toc-label">Geliştirme Süreci ve Bug Düzeltmeleri</div>
+          <div class="toc-sub">Tespit edilen hatalar ve uygulanan çözümler</div>
+        </div>
+      </div>
+      <span class="toc-page-num">12</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-item-left">
+        <div class="toc-num">11</div>
+        <div>
+          <div class="toc-label">Deployment ve CI/CD</div>
+          <div class="toc-sub">GitHub → Vercel deployment süreci</div>
+        </div>
+      </div>
+      <span class="toc-page-num">13</span>
+    </li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     1. PROJE GENEL BAKIŞ
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 1</div>
+      <h2 class="section-title">Proje Genel Bakış</h2>
+    </div>
+    <span class="page-chip">🏢 Kurumsal Site</span>
+  </div>
+
+  <p>
+    City Turizm web platformu, Türkiye merkezli bir turizm şirketinin kurumsal kimliğini,
+    hizmetlerini ve kariyer fırsatlarını dijital ortamda temsil etmek üzere sıfırdan inşa
+    edilmiş tam yığın (full-stack) bir web uygulamasıdır. Platform; çok dilli site arayüzü,
+    yerleşik içerik yönetim sistemi ve kapsamlı bir admin panelinden oluşmaktadır.
+  </p>
+
+  <div class="stat-row">
+    <div class="stat-box">
+      <div class="stat-num">30+</div>
+      <div class="stat-lbl">Sayfa / Route</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">17</div>
+      <div class="stat-lbl">API Endpoint</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">9</div>
+      <div class="stat-lbl">Admin Modülü</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">11</div>
+      <div class="stat-lbl">Veritabanı Tablosu</div>
+    </div>
+  </div>
+
+  <h3>Temel Özellikler</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🌐 Çok Dilli Destek</div>
+      <p>Türkçe / İngilizce dil değiştirme; tüm sayfa içerikleri TR/EN olarak CMS'ten yönetilir. <code>useLanguage()</code> hook ile global dil durumu yönetimi.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">✏️ Canlı İçerik Editörü</div>
+      <p>Admin panelinde her sayfanın içeriği bölüm bazlı düzenlenebilir. Değişiklikler Supabase'e yazılır, ISR cache temizlenerek anında siteye yansır.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 Başvuru Sistemi</div>
+      <p>Genel, Sürücü, Rehber ve Araç olmak üzere 4 farklı başvuru formu. PDF/görsel yükleme, Supabase Storage entegrasyonu ve admin bildirim sistemi.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🔔 Bildirim Paneli</div>
+      <p>Admin dashboard'unda mesaj, teklif, başvuru ve bülten aboneliklerini gerçek zamanlı takip eden badge ve popup bildirim sistemi.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🔍 SEO Yönetimi</div>
+      <p>Her sayfa için title, description, og:image, robots direktifleri admin panelinden düzenlenebilir. Veriler Supabase <code>seo_settings</code> tablosunda tutulur.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">📱 Tam Responsive</div>
+      <p>Tailwind CSS v4 ile mobil öncelikli tasarım. Admin paneli mobil için kayan drawer sidebar, site sayfaları breakpoint bazlı grid sistem.</p>
+    </div>
+  </div>
+
+  <h3>Hedef Kullanıcılar</h3>
+  <ul>
+    <li><strong>Ziyaretçiler:</strong> Hizmetleri inceleyen, iletişime geçen, bülten aboneliği yapan, başvuru formlarını dolduran son kullanıcılar</li>
+    <li><strong>İçerik Editörü / Admin:</strong> Sayfa içeriklerini, duyuruları, medya dosyalarını, SEO ayarlarını ve site ayarlarını yöneten şirket personeli</li>
+    <li><strong>Sistem Yöneticisi:</strong> Admin kullanıcılarını ve şifrelerini yöneten üst düzey yönetici</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     2. TEKNOLOJİ YIĞINI
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 2</div>
+      <h2 class="section-title">Teknoloji Yığını</h2>
+    </div>
+    <span class="page-chip">⚙️ Stack</span>
+  </div>
+
+  <h3>Ana Bağımlılıklar</h3>
+
+  <div class="tech-grid">
+    <div class="tech-item">
+      <div class="tech-icon" style="background:#e0f2fe">▲</div>
+      <div>
+        <div class="tech-name">Next.js</div>
+        <div class="tech-version">v16.2.4 — App Router + Turbopack</div>
+      </div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon" style="background:#fce7f3">⚛</div>
+      <div>
+        <div class="tech-name">React</div>
+        <div class="tech-version">v19.2.4 — Server + Client Components</div>
+      </div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon" style="background:#dbeafe">TS</div>
+      <div>
+        <div class="tech-name">TypeScript</div>
+        <div class="tech-version">v5 — Strict mode aktif</div>
+      </div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon" style="background:#d1fae5">🟢</div>
+      <div>
+        <div class="tech-name">Supabase</div>
+        <div class="tech-version">JS SDK v2.103 + SSR v0.10</div>
+      </div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon" style="background:#fef3c7">💨</div>
+      <div>
+        <div class="tech-name">Tailwind CSS</div>
+        <div class="tech-version">v4 — PostCSS entegrasyonu</div>
+      </div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon" style="background:#ede9fe">🎞</div>
+      <div>
+        <div class="tech-name">Framer Motion</div>
+        <div class="tech-version">v12.38 — Animasyonlar</div>
+      </div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon" style="background:#f0fdf4">🔷</div>
+      <div>
+        <div class="tech-name">Lucide React</div>
+        <div class="tech-version">v1.8 — İkon kütüphanesi</div>
+      </div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon" style="background:#fff7ed">🎠</div>
+      <div>
+        <div class="tech-name">Swiper</div>
+        <div class="tech-version">v12.1 — Slider / Carousel</div>
+      </div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon" style="background:#f1f5f9">🔧</div>
+      <div>
+        <div class="tech-name">clsx + tailwind-merge</div>
+        <div class="tech-version">Koşullu sınıf birleştirme</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Geliştirme Araçları</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🐙 GitHub</div>
+      <p>Kaynak kodu versiyonlama. Repository: <code>acebeciogluedtech/city-turizm</code>. <code>main</code> branch doğrudan production'a deploy edilir.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">▲ Vercel</div>
+      <p>Otomatik CI/CD. Her <code>main</code> push sonrası build tetiklenir. Turbopack ile optimize edilmiş build süreci. Ortam değişkenleri Vercel dashboard'dan yönetilir.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🗄 Supabase</div>
+      <p>PostgreSQL veritabanı, dosya depolama (Storage) ve kimlik doğrulama altyapısı. Row Level Security (RLS) tüm tablolarda aktif.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🔑 Ortam Değişkenleri</div>
+      <p><code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code> — Vercel Environment Variables'ta tanımlı.</p>
+    </div>
+  </div>
+
+  <h3>Mimari Kararlar</h3>
+  <ul>
+    <li><strong>App Router kullanımı:</strong> Next.js 16 App Router, <code>(site)</code> route grubu ile admin ve kullanıcı rotaları birbirinden izole edilmiştir</li>
+    <li><strong>Client / Server ayrımı:</strong> Statik içerikler Server Component olarak render edilir; interaktif bileşenler <code>'use client'</code> ile işaretlenir</li>
+    <li><strong>Supabase Admin Client:</strong> API route'larında service role key ile <code>supabaseAdmin</code> kullanılır; public client tarafında yalnızca anon key kullanılır</li>
+    <li><strong>ISR (Incremental Static Regeneration):</strong> Sayfa içerikleri değiştiğinde <code>revalidateTag</code> ile cache temizlenerek statik sayfalar yeniden oluşturulur</li>
+    <li><strong>Turbopack:</strong> Build süreci Turbopack ile hızlandırılmıştır; geliştirme ortamında hot-reload süresi minimize edilmiştir</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     3. DOSYA YAPISI
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 3</div>
+      <h2 class="section-title">Dosya ve Dizin Yapısı</h2>
+    </div>
+    <span class="page-chip">📁 Mimari</span>
+  </div>
+
+  <p>Proje Next.js 16 App Router mimarisini takip eder. Route grupları <code>(site)</code> ve admin ayrımını sağlar.</p>
+
+  <pre><code><span class="code-comment">city-turizm/</span>
+├── <span class="code-key">src/</span>
+│   ├── <span class="code-key">app/</span>
+│   │   ├── <span class="code-key">(site)/</span>                   <span class="code-comment">← Kullanıcı arayüzü route grubu</span>
+│   │   │   ├── layout.tsx              <span class="code-comment">← Site layout (navbar, footer)</span>
+│   │   │   ├── basvuru/page.tsx        <span class="code-comment">← Başvuru formları (4 tip)</span>
+│   │   │   ├── iletisim/               <span class="code-comment">← İletişim sayfası</span>
+│   │   │   ├── duyurular/              <span class="code-comment">← Duyurular listesi</span>
+│   │   │   ├── medya/                  <span class="code-comment">← Fotoğraf & video galerisi</span>
+│   │   │   ├── hizmetler/[slug]/       <span class="code-comment">← Dinamik hizmet sayfaları</span>
+│   │   │   └── kurumsal/[slug]/        <span class="code-comment">← Kurumsal sayfalar</span>
+│   │   │
+│   │   ├── <span class="code-key">admin/</span>                     <span class="code-comment">← Admin panel</span>
+│   │   │   ├── layout.tsx              <span class="code-comment">← Admin layout (sidebar, auth guard)</span>
+│   │   │   ├── page.tsx                <span class="code-comment">← Giriş sayfası</span>
+│   │   │   ├── dashboard/              <span class="code-comment">← Bildirim ve istatistik paneli</span>
+│   │   │   ├── editor/[slug]/          <span class="code-comment">← Canlı sayfa editörü</span>
+│   │   │   ├── pages/                  <span class="code-comment">← Sayfa listesi</span>
+│   │   │   ├── messages/               <span class="code-comment">← İletişim mesajları</span>
+│   │   │   ├── quotes/                 <span class="code-comment">← Teklif talepleri</span>
+│   │   │   ├── applications/           <span class="code-comment">← Başvurular</span>
+│   │   │   ├── mail-list/              <span class="code-comment">← Bülten aboneleri</span>
+│   │   │   ├── seo/                    <span class="code-comment">← SEO ayarları</span>
+│   │   │   └── settings/               <span class="code-comment">← Site ayarları ve admin kullanıcıları</span>
+│   │   │
+│   │   └── <span class="code-key">api/admin/</span>                 <span class="code-comment">← API Route Handler'ları</span>
+│   │       ├── content/route.ts        <span class="code-comment">← Sayfa içerik CRUD</span>
+│   │       ├── messages/route.ts       <span class="code-comment">← Mesaj CRUD + okundu işaretleme</span>
+│   │       ├── applications/route.ts   <span class="code-comment">← Başvuru CRUD</span>
+│   │       ├── quotes/route.ts         <span class="code-comment">← Teklif CRUD</span>
+│   │       ├── newsletter/route.ts     <span class="code-comment">← Bülten abone yönetimi</span>
+│   │       ├── upload/route.ts         <span class="code-comment">← Dosya yükleme → Supabase Storage</span>
+│   │       ├── seo/route.ts            <span class="code-comment">← SEO ayarları CRUD</span>
+│   │       ├── settings/route.ts       <span class="code-comment">← Site ayarları CRUD</span>
+│   │       └── auth/route.ts           <span class="code-comment">← Admin kimlik doğrulama</span>
+│   │
+│   ├── <span class="code-key">components/</span>                  <span class="code-comment">← Paylaşılan UI bileşenleri</span>
+│   │   ├── Navbar.tsx
+│   │   ├── Footer.tsx
+│   │   └── ...
+│   │
+│   ├── <span class="code-key">lib/</span>                          <span class="code-comment">← Yardımcı kütüphaneler</span>
+│   │   ├── supabase.ts             <span class="code-comment">← Public Supabase client</span>
+│   │   ├── supabase-admin.ts       <span class="code-comment">← Service role client</span>
+│   │   ├── content.ts              <span class="code-comment">← İçerik tipleri ve yardımcılar</span>
+│   │   ├── language.tsx            <span class="code-comment">← Dil context provider</span>
+│   │   ├── usePageContent.tsx      <span class="code-comment">← Sayfa içerik hook'u</span>
+│   │   └── admin/store.ts          <span class="code-comment">← Admin global state (AdminProvider)</span>
+│   │
+│   ├── <span class="code-key">data/</span>                         <span class="code-comment">← Statik veri tanımları</span>
+│   └── <span class="code-key">types/</span>                        <span class="code-comment">← TypeScript tip tanımları</span>
+│
+├── <span class="code-key">public/</span>                           <span class="code-comment">← Statik dosyalar (WebP + AVIF optimize)</span>
+├── supabase-schema.sql             <span class="code-comment">← Tüm tablo tanımları + RLS politikaları</span>
+└── next.config.ts</code></pre>
+
+  <div class="info-box">
+    <div class="info-icon">ℹ️</div>
+    <p class="info-text"><strong>Route Grubu İzolasyonu:</strong> <code>(site)</code> klasörü bir Next.js route grubudur — URL'ye etki etmez. Bu yapı, site layout'u (Navbar/Footer) ile admin layout'unu tamamen birbirinden ayırır. Admin sayfaları <code>/admin/*</code> path'inde, site sayfaları kök düzeyinde erişilebilir.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     4. VERİTABANI ŞEMASI
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 4</div>
+      <h2 class="section-title">Veritabanı Şeması</h2>
+    </div>
+    <span class="page-chip">🗄 Supabase / PostgreSQL</span>
+  </div>
+
+  <p>
+    Tüm veriler Supabase (PostgreSQL) üzerinde saklanır. Her tablo için Row Level Security (RLS)
+    aktif olup; herkese açık write politikaları ile authenticated-only read/yönetim politikaları uygulanmaktadır.
+  </p>
+
+  <div class="db-table">
+    <div class="db-table-header"><div class="db-table-icon">📄</div> page_content — Sayfa İçerikleri</div>
+    <div class="db-col"><span class="db-col-name">id</span><span class="db-col-type">uuid PK</span><span class="db-col-desc">Otomatik oluşturulan benzersiz kimlik</span></div>
+    <div class="db-col"><span class="db-col-name">page_id</span><span class="db-col-type">text</span><span class="db-col-desc">Sayfa tanımlayıcısı (ör: "anasayfa", "hakkimizda")</span></div>
+    <div class="db-col"><span class="db-col-name">section_id</span><span class="db-col-type">text</span><span class="db-col-desc">Bölüm tanımlayıcısı (ör: "hero", "features")</span></div>
+    <div class="db-col"><span class="db-col-name">field_id</span><span class="db-col-type">text</span><span class="db-col-desc">Alan tanımlayıcısı (ör: "title", "subtitle")</span></div>
+    <div class="db-col"><span class="db-col-name">value_tr</span><span class="db-col-type">text</span><span class="db-col-desc">Türkçe içerik değeri</span></div>
+    <div class="db-col"><span class="db-col-name">value_en</span><span class="db-col-type">text</span><span class="db-col-desc">İngilizce içerik değeri</span></div>
+    <div class="db-col"><span class="db-col-name">updated_at</span><span class="db-col-type">timestamptz</span><span class="db-col-desc">Son güncelleme zamanı</span></div>
+  </div>
+
+  <div class="db-table">
+    <div class="db-table-header"><div class="db-table-icon">📬</div> contact_messages — İletişim Mesajları</div>
+    <div class="db-col"><span class="db-col-name">id</span><span class="db-col-type">uuid PK</span><span class="db-col-desc">Benzersiz mesaj kimliği</span></div>
+    <div class="db-col"><span class="db-col-name">name / email / phone</span><span class="db-col-type">text</span><span class="db-col-desc">Gönderen bilgileri</span></div>
+    <div class="db-col"><span class="db-col-name">message</span><span class="db-col-type">text</span><span class="db-col-desc">Mesaj içeriği</span></div>
+    <div class="db-col"><span class="db-col-name">source</span><span class="db-col-type">text</span><span class="db-col-desc">"contact" | "quote" — kaynağı belirtir</span></div>
+    <div class="db-col"><span class="db-col-name">is_read</span><span class="db-col-type">boolean</span><span class="db-col-desc">Okundu/okunmadı durumu (default: false)</span></div>
+    <div class="db-col"><span class="db-col-name">created_at</span><span class="db-col-type">timestamptz</span><span class="db-col-desc">Gönderim zamanı</span></div>
+  </div>
+
+  <div class="db-table">
+    <div class="db-table-header"><div class="db-table-icon">📋</div> applications — Başvurular</div>
+    <div class="db-col"><span class="db-col-name">id</span><span class="db-col-type">uuid PK</span><span class="db-col-desc">Benzersiz başvuru kimliği</span></div>
+    <div class="db-col"><span class="db-col-name">form_type</span><span class="db-col-type">text</span><span class="db-col-desc">"genel" | "surucu" | "rehber" | "arac"</span></div>
+    <div class="db-col"><span class="db-col-name">name / email / phone</span><span class="db-col-type">text</span><span class="db-col-desc">Başvuran bilgileri</span></div>
+    <div class="db-col"><span class="db-col-name">data</span><span class="db-col-type">jsonb</span><span class="db-col-desc">Form'a özgü ek alanlar (JSON)</span></div>
+    <div class="db-col"><span class="db-col-name">is_read</span><span class="db-col-type">boolean</span><span class="db-col-desc">Okundu durumu</span></div>
+    <div class="db-col"><span class="db-col-name">created_at</span><span class="db-col-type">timestamptz</span><span class="db-col-desc">Başvuru zamanı</span></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="db-table">
+      <div class="db-table-header" style="font-size:8.5pt"><div class="db-table-icon">📰</div> newsletter_subscribers</div>
+      <div class="db-col"><span class="db-col-name" style="width:120px">id</span><span class="db-col-type">uuid PK</span><span class="db-col-desc"></span></div>
+      <div class="db-col"><span class="db-col-name" style="width:120px">email</span><span class="db-col-type">text unique</span><span class="db-col-desc">Abone e-postası</span></div>
+      <div class="db-col"><span class="db-col-name" style="width:120px">active</span><span class="db-col-type">boolean</span><span class="db-col-desc">Abonelik aktif mi?</span></div>
+      <div class="db-col"><span class="db-col-name" style="width:120px">subscribed_at</span><span class="db-col-type">timestamptz</span><span class="db-col-desc"></span></div>
+    </div>
+    <div class="db-table">
+      <div class="db-table-header" style="font-size:8.5pt"><div class="db-table-icon">💬</div> quotes — Teklif Talepleri</div>
+      <div class="db-col"><span class="db-col-name" style="width:120px">id</span><span class="db-col-type">uuid PK</span><span class="db-col-desc"></span></div>
+      <div class="db-col"><span class="db-col-name" style="width:120px">name/email/phone</span><span class="db-col-type">text</span><span class="db-col-desc">İletişim bilgileri</span></div>
+      <div class="db-col"><span class="db-col-name" style="width:120px">company</span><span class="db-col-type">text</span><span class="db-col-desc">Şirket adı</span></div>
+      <div class="db-col"><span class="db-col-name" style="width:120px">is_read</span><span class="db-col-type">boolean</span><span class="db-col-desc">Okundu durumu</span></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="db-table">
+      <div class="db-table-header" style="font-size:8.5pt"><div class="db-table-icon">🔍</div> seo_settings</div>
+      <div class="db-col"><span class="db-col-name" style="width:100px">key</span><span class="db-col-type">text PK</span><span class="db-col-desc">"home_title" gibi</span></div>
+      <div class="db-col"><span class="db-col-name" style="width:100px">value</span><span class="db-col-type">text</span><span class="db-col-desc">SEO değeri</span></div>
+      <div class="db-col"><span class="db-col-name" style="width:100px">updated_at</span><span class="db-col-type">timestamptz</span><span class="db-col-desc"></span></div>
+    </div>
+    <div class="db-table">
+      <div class="db-table-header" style="font-size:8.5pt"><div class="db-table-icon">⚙️</div> site_settings</div>
+      <div class="db-col"><span class="db-col-name" style="width:100px">key</span><span class="db-col-type">text PK</span><span class="db-col-desc">Ayar anahtarı</span></div>
+      <div class="db-col"><span class="db-col-name" style="width:100px">value</span><span class="db-col-type">text</span><span class="db-col-desc">Değer (JSON veya düz metin)</span></div>
+      <div class="db-col"><span class="db-col-name" style="width:100px">updated_at</span><span class="db-col-type">timestamptz</span><span class="db-col-desc"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     5. API KATMANI
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 5</div>
+      <h2 class="section-title">API Katmanı</h2>
+    </div>
+    <span class="page-chip">🔌 REST API</span>
+  </div>
+
+  <p>
+    Tüm API endpoint'leri Next.js Route Handlers (<code>app/api/</code>) olarak implement edilmiştir.
+    Server-side'da <code>supabaseAdmin</code> (service role) kullanılır; kimlik doğrulama
+    <code>sessionStorage</code> tabanlı token kontrolü ile admin layout tarafında sağlanır.
+  </p>
+
+  <h3>İçerik ve Medya</h3>
+
+  <div class="api-route">
+    <span class="method method-get">GET</span>
+    <div><div class="api-path">/api/admin/content?pageId={'{slug}'}</div><div class="api-desc">Belirtilen sayfa için tüm <code>page_content</code> kayıtlarını döner. pageId verilmezse tüm içerik gelir.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-post">POST</span>
+    <div><div class="api-path">/api/admin/content</div><div class="api-desc">Body: <code>{'{pageId, sectionId, fieldId, tr, en}'}</code> — İçerik kaydı oluşturur veya günceller (upsert). Başarıda <code>revalidateTag</code> çağrılır.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-post">POST</span>
+    <div><div class="api-path">/api/admin/upload</div><div class="api-desc">multipart/form-data — Dosyayı Supabase Storage'a yükler, public URL döner. PDF, görsel ve belge tiplerini destekler.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-post">POST</span>
+    <div><div class="api-path">/api/admin/convert-webp</div><div class="api-desc">Yüklenen görsel dosyasını WebP ve AVIF formatlarına dönüştürür, optimize edilmiş versiyonları döner.</div></div>
+  </div>
+
+  <h3>Mesajlar ve Başvurular</h3>
+
+  <div class="api-route">
+    <span class="method method-get">GET</span>
+    <div><div class="api-path">/api/admin/messages</div><div class="api-desc"><code>contact_messages</code> tablosundan tüm mesajları döner (created_at DESC).</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-patch">PATCH</span>
+    <div><div class="api-path">/api/admin/messages</div><div class="api-desc">Body: <code>{'{id, is_read}'}</code> veya <code>{'{markAllRead: true}'}</code> — Tek mesaj veya tüm mesajları okundu işaretler.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-get">GET</span>
+    <div><div class="api-path">/api/admin/applications</div><div class="api-desc"><code>applications</code> tablosundan tüm başvuruları döner. <code>form_type</code>'a göre filtreleme desteklenir.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-patch">PATCH</span>
+    <div><div class="api-path">/api/admin/applications</div><div class="api-desc">Tek başvuru veya toplu olarak okundu işaretleme. <code>{'{markAllRead: true}'}</code> tümünü işaretler.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-get">GET</span>
+    <div><div class="api-path">/api/admin/quotes</div><div class="api-desc">Teklif taleplerini listeler.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-patch">PATCH</span>
+    <div><div class="api-path">/api/admin/quotes</div><div class="api-desc">Teklif okundu durumu güncelleme.</div></div>
+  </div>
+
+  <h3>Ayarlar ve Kullanıcı Yönetimi</h3>
+
+  <div class="api-route">
+    <span class="method method-get">GET</span>
+    <div><div class="api-path">/api/admin/newsletter</div><div class="api-desc">Bülten abonelerini listeler.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-get">GET</span>
+    <div><div class="api-path">/api/admin/seo</div><div class="api-desc">SEO ayarlarını döner.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-post">POST</span>
+    <div><div class="api-path">/api/admin/seo</div><div class="api-desc">SEO key-value çiftini kaydeder/günceller.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-post">POST</span>
+    <div><div class="api-path">/api/admin/auth</div><div class="api-desc">Admin kullanıcı adı ve şifre doğrulaması. Başarıda session token döner.</div></div>
+  </div>
+  <div class="api-route">
+    <span class="method method-post">POST</span>
+    <div><div class="api-path">/api/admin/change-password</div><div class="api-desc">Admin şifre değiştirme. Mevcut şifre doğrulama zorunludur.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     6. SİTE SAYFALARI
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 6</div>
+      <h2 class="section-title">Site Sayfaları</h2>
+    </div>
+    <span class="page-chip">🌐 Kullanıcı Arayüzü</span>
+  </div>
+
+  <p>
+    Tüm kullanıcı sayfaları <code>src/app/(site)/</code> altında organize edilmiştir. Her sayfa
+    bir <code>page.tsx</code> (Server Component veya client wrapper) ve gerektiğinde ayrı bir
+    <code>*Client.tsx</code> bileşeni içerir.
+  </p>
+
+  <h3>Ana Sayfalar</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Route</th>
+        <th>Sayfa Adı</th>
+        <th>Öne Çıkan Özellikler</th>
+        <th>Render</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>/</code></td><td>Anasayfa</td><td>Hero slider, hizmetler grid, stats, testimonials, CTA</td><td><span class="badge badge-blue">ISR</span></td></tr>
+      <tr><td><code>/iletisim</code></td><td>İletişim</td><td>Yatay info bar (tel/email/adres/saat), Google Maps, iletişim formu</td><td><span class="badge badge-green">Client</span></td></tr>
+      <tr><td><code>/basvuru</code></td><td>Başvuru</td><td>4 kategori seçici, dinamik form, dosya yükleme, loading spinner</td><td><span class="badge badge-green">Client</span></td></tr>
+      <tr><td><code>/duyurular</code></td><td>Duyurular</td><td>Kategorili filtre, arama, sayfalama, lightbox detay</td><td><span class="badge badge-green">Client</span></td></tr>
+      <tr><td><code>/medya</code></td><td>Medya</td><td>Video galerisi (YouTube embed), fotoğraf galerisi, lightbox</td><td><span class="badge badge-green">Client</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Hizmet Sayfaları <span style="font-size:8.5pt;font-weight:400;color:#6b7280">(Dinamik Route: /hizmetler/[slug])</span></h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🚌 Özel Transfer</div>
+      <p>VIP ve grup transferleri, araç seçenekleri, rezervasyon formu.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🎓 Öğrenci Taşımacılığı</div>
+      <p>Okul servisi, güzergah bilgileri, veli bilgilendirme.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">👔 Personel Taşımacılığı</div>
+      <p>Kurumsal personel servis hizmetleri ve rotalama.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🌍 Turizm Acenteliği</div>
+      <p>Tur paketleri, destinasyonlar, rezervasyon akışı.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🚗 Araç Kiralama</div>
+      <p>Filo görüntüleme, fiyatlandırma, kiralama formu.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">⛽ Akaryakıt İstasyonu</div>
+      <p>İstasyon bilgileri, hizmetler, konum.</p>
+    </div>
+  </div>
+
+  <h3>Kurumsal Sayfalar <span style="font-size:8.5pt;font-weight:400;color:#6b7280">(Dinamik Route: /kurumsal/[slug])</span></h3>
+
+  <div class="grid-3">
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">🏢 Şirket Profili</div>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">👥 Biz Kimiz</div>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">💬 Başkanın Mesajı</div>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">🚗 Araç Filosu</div>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">👩‍💼 İnsan Kaynakları</div>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">🌿 Çevre Politikası</div>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">🔒 Gizlilik & Güvenlik</div>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">📜 KVKK</div>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">🍪 Çerez Politikası</div>
+    </div>
+  </div>
+
+  <h3>Navigasyon Bileşenleri</h3>
+  <div class="card">
+    <div class="card-title">Navbar + Footer</div>
+    <p>
+      <code>Navbar.tsx</code>: Mega menü destekli, Hizmetler ve Kurumsal dropdown'ları, dil değiştirici, mobil drawer menü.
+      <code>Footer.tsx</code>: 3 sütunlu bağlantı grid'i, sosyal medya ikonları, bülten abonelik formu, yasal linkler.
+      Her iki bileşen de CMS'ten yönetilebilir içeriklere sahiptir (footer/navbar editör sayfaları ayrıca mevcut).
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     7. ADMİN PANEL
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 7</div>
+      <h2 class="section-title">Admin Panel</h2>
+    </div>
+    <span class="page-chip">🛡 Yönetim</span>
+  </div>
+
+  <p>
+    Admin paneli <code>/admin</code> path'inde çalışır. Giriş yapılmadan erişilmeye çalışıldığında
+    <code>sessionStorage</code> kontrolü ile otomatik <code>/admin</code> login sayfasına yönlendirme yapılır.
+    Sidebar navigasyon tüm modüller için badge'li bildirim sayaçları içerir.
+  </p>
+
+  <h3>Kimlik Doğrulama Akışı</h3>
+  <div class="card">
+    <div class="card-title">Session-based Auth</div>
+    <p>
+      Giriş formundan alınan bilgiler <code>/api/admin/auth</code>'a gönderilir.
+      Başarılı doğrulama sonrası <code>sessionStorage</code>'a <code>admin_auth</code> ve <code>admin_token</code> anahtarları yazılır.
+      <code>AdminLayout</code> her render'da bu değerleri kontrol eder; yoksa <code>router.replace('/admin')</code> çağrılır.
+      Çıkış işlemi tüm session anahtarlarını temizler.
+    </p>
+  </div>
+
+  <h3>Modüller</h3>
+
+  <table>
+    <thead>
+      <tr><th>Modül</th><th>Route</th><th>Başlıca Özellikler</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Dashboard</strong></td>
+        <td><code>/admin/dashboard</code></td>
+        <td>İstatistik kartları, son aktiviteler, bildirim popup (mesaj/teklif/başvuru/abone), 30s polling</td>
+      </tr>
+      <tr>
+        <td><strong>İçerik Yönetimi</strong></td>
+        <td><code>/admin/pages</code></td>
+        <td>Tüm düzenlenebilir sayfaların listesi, editöre yönlendirme</td>
+      </tr>
+      <tr>
+        <td><strong>Canlı Editör</strong></td>
+        <td><code>/admin/editor/[slug]</code></td>
+        <td>Bölüm bazlı içerik düzenleme, TR/EN sekmeleri, sağ panel edit formu, canlı önizleme</td>
+      </tr>
+      <tr>
+        <td><strong>SEO Yönetimi</strong></td>
+        <td><code>/admin/seo</code></td>
+        <td>Her sayfa için title, description, og:image, robots, canonical URL yönetimi</td>
+      </tr>
+      <tr>
+        <td><strong>Mesajlar</strong></td>
+        <td><code>/admin/messages</code></td>
+        <td>Okunmamış badge, genişletilebilir kart, okundu/silme işlemleri, kaynak etiketi</td>
+      </tr>
+      <tr>
+        <td><strong>Teklifler</strong></td>
+        <td><code>/admin/quotes</code></td>
+        <td>Teklif talepleri listesi, okundu durumu, filtre</td>
+      </tr>
+      <tr>
+        <td><strong>Başvurular</strong></td>
+        <td><code>/admin/applications</code></td>
+        <td>Form tipi bazlı filtreleme, başvuru detay görüntüleme, belge indirme</td>
+      </tr>
+      <tr>
+        <td><strong>Mail Listesi</strong></td>
+        <td><code>/admin/mail-list</code></td>
+        <td>Bülten aboneleri, CSV dışa aktarma, abone sayısı</td>
+      </tr>
+      <tr>
+        <td><strong>Ayarlar</strong></td>
+        <td><code>/admin/settings</code></td>
+        <td>İletişim bilgileri, sosyal medya, logo, footer metni; admin kullanıcı yönetimi; şifre değiştirme</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Bildirim Sistemi</h3>
+  <div class="card">
+    <div class="card-title">Badge Sayaçları ve Bildirim Popup</div>
+    <p>
+      <code>AdminLayout</code> içindeki <code>useBadgeCounts</code> hook'u 30 saniyede bir tüm
+      endpoint'leri poll ederek okunmamış mesaj, teklif, başvuru ve yeni abone sayılarını hesaplar.
+      Dashboard'un bildirim popup'ı blur backdrop'lu tam ekran modal içinde, tip gruplandırmalı ve
+      staggered animasyonlu öğe listesi gösterir. Aboneler için <code>localStorage</code>'da
+      görülen abone sayısı kaydedilerek yalnızca <em>yeni</em> aboneler sayılır.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     8. İÇERİK YÖNETİM SİSTEMİ
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 8</div>
+      <h2 class="section-title">İçerik Yönetim Sistemi (CMS)</h2>
+    </div>
+    <span class="page-chip">✏️ Live Editor</span>
+  </div>
+
+  <p>
+    Platform, harici bir CMS gerektirmeden kendi bünyesinde barındırdığı canlı editör altyapısına sahiptir.
+    Her sayfa içeriği <code>page_content</code> tablosunda <code>page_id · section_id · field_id</code>
+    üçlüsü ile anahtar-değer şeklinde saklanır.
+  </p>
+
+  <h3>Veri Akışı</h3>
+
+  <pre><code><span class="code-comment">1. Sayfa yüklendiğinde (Server Component):</span>
+   <span class="code-type">fetchPageContent</span>(pageId) → Supabase → <span class="code-val">BilingualContent</span> map
+
+<span class="code-comment">2. Client Component'te içerik okuma:</span>
+   <span class="code-key">function</span> <span class="code-type">v</span>(sectionId, fieldId, fallback):
+     content[<span class="code-str">`${sectionId}.${fieldId}`</span>]?.[lang] ?? fallback
+
+<span class="code-comment">3. Admin editörde canlı düzenleme:</span>
+   Alan seçilir → sağ panel açılır → input değişir
+   → <span class="code-type">handleLiveChange</span>({ sectionId, fieldId, tr, en })
+   → liveEdit state → <span class="code-key">g()</span> fonksiyonu önce liveEdit'i kontrol eder
+   → görsel anlık güncellenir (DB yazılmadan)
+
+<span class="code-comment">4. Kaydet butonu:</span>
+   POST /api/admin/content → Supabase upsert
+   → <span class="code-type">revalidateTag</span>('page-content')
+   → ISR cache temizlenir → site sayfası yeniden render</code></pre>
+
+  <h3>GetVal Tip Sistemi</h3>
+  <div class="card">
+    <div class="card-title">İçerik Okuma Fonksiyonları</div>
+    <p>
+      Ana editör bileşeninde <code>g(sectionId, fieldId, fallback?)</code> iki argümanlı bir fonksiyon olarak
+      tanımlıdır. Preview alt bileşenlerine <code>GetVal = (fieldId: string) =&gt; string</code> tipinde
+      curried fonksiyon geçilir. Bu sayede alt bileşenler section context'ini prop olarak taşımak zorunda kalmaz.
+      Footer ve Navbar özel editörleri kendi section helper'larını (<code>br</code>, <code>ct</code>, <code>nv</code>…)
+      bu curried pattern ile oluşturur.
+    </p>
+  </div>
+
+  <h3>Desteklenen Alan Tipleri</h3>
+  <div class="grid-3">
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">📝 Text</div>
+      <p style="font-size:8.5pt">Tek satır metin. Başlık, etiket, CTA metinleri.</p>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">📄 Textarea</div>
+      <p style="font-size:8.5pt">Çok satırlı metin. Açıklamalar, paragraflar.</p>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">🖼 Image</div>
+      <p style="font-size:8.5pt">Dosya yükleme. WebP/AVIF dönüşüm desteği.</p>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">🔗 URL</div>
+      <p style="font-size:8.5pt">Bağlantı alanları. CTA href, sosyal medya.</p>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">🎨 Icon</div>
+      <p style="font-size:8.5pt">Lucide ikon seçici. BizKimizIconPicker bileşeni.</p>
+    </div>
+    <div class="card" style="padding:12px 16px">
+      <div class="card-title" style="font-size:9pt">📹 YouTube</div>
+      <p style="font-size:8.5pt">Video ID girişi. Medya galerisinde embed.</p>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="info-icon">ℹ️</div>
+    <p class="info-text">
+      <strong>Dil bağımsız alanlar:</strong> <code>_icon</code>, <code>_img</code>, <code>hero_img</code>, <code>logo</code> ile biten/başlayan field'lar dil bağımsız kabul edilir;
+      her zaman TR değeri okunur. Bu sayede görseller ve ikonlar tek yerden yönetilir, her dil için ayrı yükleme gerekmez.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     9. BAŞVURU FORMLARI
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 9</div>
+      <h2 class="section-title">Başvuru Formları</h2>
+    </div>
+    <span class="page-chip">📋 Başvuru Sistemi</span>
+  </div>
+
+  <p>
+    <code>/basvuru</code> sayfası dört farklı iş başvurusu tipini tek sayfa içinde yönetir.
+    URL parametresi (<code>?kategori=rehber</code> gibi) ile doğrudan kategori açılabilir.
+  </p>
+
+  <h3>Form Tipleri</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🏢 Genel Başvuru</div>
+      <p>Ad soyad, e-posta, telefon, doğum tarihi, adres, pozisyon tercihi, özgeçmiş yükleme (PDF/görsel).</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🚌 Sürücü Başvuru</div>
+      <p>Temel bilgiler, sürücü belgesi tipi, deneyim yılı, araç tercihi, ehliyet belgesi yükleme.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🧭 Rehber Başvuru</div>
+      <p>Temel bilgiler, rehber lisans numarası, dil bilgisi, çalışma bölgeleri, lisans belgesi yükleme.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🚗 Araç Başvuru</div>
+      <p>Temel bilgiler, araç tipi, model/yıl, kapasite, ruhsat ve sigorta belgesi yükleme.</p>
+    </div>
+  </div>
+
+  <h3>Teknik Uygulama</h3>
+
+  <pre><code><span class="code-comment">// Yükleme spinner implementasyonu</span>
+<span class="code-key">const</span> [submitting, setSubmitting] = useState(<span class="code-val">false</span>)
+
+<span class="code-key">async function</span> <span class="code-type">handleSubmit</span>(e: FormEvent) {
+  e.preventDefault()
+  <span class="code-key">if</span> (!d.isim || !d.email || !d.telefon) <span class="code-key">return</span>  <span class="code-comment">// JS guard</span>
+  setSubmitting(<span class="code-val">true</span>)
+  <span class="code-key">try</span> {
+    <span class="code-comment">// 1. Dosya varsa Storage'a yükle → public URL al</span>
+    <span class="code-comment">// 2. POST /api/admin/applications ile kaydet</span>
+  } <span class="code-key">finally</span> {
+    setSubmitting(<span class="code-val">false</span>)  <span class="code-comment">// Her durumda spinner kaldır</span>
+  }
+}
+
+<span class="code-comment">// noValidate — browser validation devre dışı, JS ile kontrol edilir</span>
+<span class="code-str">&lt;form noValidate onSubmit={handleSubmit}&gt;</span>
+  <span class="code-str">&lt;SubmitBtn loading={submitting} /&gt;</span>
+<span class="code-str">&lt;/form&gt;</span></code></pre>
+
+  <div class="warn-box">
+    <div class="info-icon">⚠️</div>
+    <p class="warn-text">
+      <strong>Önemli:</strong> Tüm formlarda <code>noValidate</code> attribute zorunludur. Browser native validation,
+      <code>required</code> alanlar boşken formu submit etmeden sessizce engeller; bu durumda <code>onSubmit</code> tetiklenmez
+      ve spinner asla gösterilmez. <code>noValidate</code> + JS guard pattern bu sorunu çözer.
+    </p>
+  </div>
+
+  <h3>Dosya Yükleme Akışı</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-label">1. Kullanıcı dosya seçer</div>
+      <p class="timeline-desc">Input onChange ile <code>File</code> nesnesi state'e alınır. Dosya tipi ve boyut kontrolü yapılır.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">2. Form submit edilir, spinner başlar</div>
+      <p class="timeline-desc"><code>setSubmitting(true)</code> çağrılır, buton disabled + "Yükleniyor..." mesajı + CSS animate-spin gösterilir.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">3. Dosya Storage'a yüklenir</div>
+      <p class="timeline-desc">FormData ile <code>POST /api/admin/upload</code> → Supabase Storage bucket → public URL döner.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">4. Başvuru kaydedilir</div>
+      <p class="timeline-desc">Form verileri + dosya URL'si <code>POST /api/admin/applications</code> ile Supabase'e yazılır.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">5. Spinner durur, başarı mesajı gösterilir</div>
+      <p class="timeline-desc"><code>finally</code> bloğunda <code>setSubmitting(false)</code>, ardından success state ile teşekkür ekranı render edilir.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     10. GELİŞTİRME SÜRECİ VE BUG DÜZELTMELERİ
+═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 10</div>
+      <h2 class="section-title">Geliştirme Süreci ve Bug Düzeltmeleri</h2>
+    </div>
+    <span class="page-chip">🔧 Changelog</span>
+  </div>
+
+  <p>
+    Geliştirme süreci boyunca tespit edilen hatalar ve uygulanan düzeltmeler aşağıda belgelenmiştir.
+  </p>
+
+  <h3>UI/UX İyileştirmeleri</h3>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/(site)/iletisim/IletisimClient.tsx</div>
+    <div class="fix-desc">
+      <strong>Problem:</strong> İletişim bilgi barı boş görünüyordu — CMS değerleri henüz tanımlanmamış olduğundan fallback olarak boş string (<code>''</code>) dönüyordu.<br/>
+      <strong>Çözüm:</strong> Her iletişim kartına (<code>c1</code>: telefon, <code>c2</code>: e-posta, <code>c3</code>: adres, <code>c4</code>: çalışma saatleri) anlamlı varsayılan değerler atandı. Gerçek CMS verisi geldiğinde override edilir.
+    </div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/(site)/basvuru/page.tsx</div>
+    <div class="fix-desc">
+      <strong>Problem:</strong> Dosya yüklenip form gönderildiğinde buton aktif kalıyor ve spinner gösterilmiyordu. Sorun yalnızca Rehber formunda düzeltilebilmişti.<br/>
+      <strong>Kök Neden:</strong> Browser native form validation, <code>required</code> alanlar boşken <code>onSubmit</code>'i tetiklemiyordu.<br/>
+      <strong>Çözüm:</strong> Tüm 4 forma <code>noValidate</code> eklendi + JS ile zorunlu alan kontrolü; <code>submitting</code> state ile loading spinner/disabled button; <code>try/finally</code> ile her durumda spinner kaldırma.
+    </div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/admin/dashboard/page.tsx</div>
+    <div class="fix-desc">
+      <strong>Problem:</strong> Bülten aboneliği yapıldığında admin panelinde bildirim görünmüyordu.<br/>
+      <strong>Kök Neden:</strong> Abone unread sayısı hesaplanıyor fakat <code>totalUnread</code>'e eklenmiyordu. Ayrıca <code>unreadItems</code> listesine de dahil edilmemişti.<br/>
+      <strong>Çözüm:</strong> <code>localStorage</code>'daki <code>badge_seen_subscribers</code> değeri ile fark hesaplanır; yeni aboneler popup listesine ve badge sayacına dahil edilir.
+    </div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/admin/dashboard/page.tsx — Popup Redesign</div>
+    <div class="fix-desc">
+      <strong>İyileştirme:</strong> Bildirim popup'ı baştan tasarlandı.<br/>
+      <strong>Yenilikler:</strong> Blur backdrop, koyu gradient header, tip bazlı gruplandırma (mesaj/teklif/başvuru/abone), staggered animasyonlu öğe listesi, per-item "İncele" ve "Okundu" butonları, "Tümünü okundu işaretle" footer aksiyonu.
+    </div>
+  </div>
+
+  <h3>TypeScript Build Hataları (Vercel)</h3>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/(site)/duyurular/DuyurularClient.tsx:85</div>
+    <div class="fix-desc">
+      <strong>Hata:</strong> <code>typeof categoriesTR</code> prop tipi build sırasında çözümlenemedi.<br/>
+      <strong>Çözüm:</strong> Prop tipi inline olarak <code>{'{'}  key: string; icon: React.ElementType; color: string {'}'} []</code> şeklinde tanımlandı.
+    </div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/(site)/medya/MedyaClient.tsx:16</div>
+    <div class="fix-desc">
+      <strong>Hata:</strong> Framer Motion <code>ease</code> prop'una <code>number[]</code> atanıyor; tip <code>Easing | Easing[]</code> bekliyor.<br/>
+      <strong>Çözüm:</strong> <code>[0.16, 1, 0.3, 1] as [number, number, number, number]</code> tuple cast eklendi.
+    </div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/admin/settings/page.tsx:567</div>
+    <div class="fix-desc">
+      <strong>Hata:</strong> <code>&lt;motion.div initialOpacity={'{0}'}&gt;</code> — <code>initialOpacity</code> Motion prop'u geçersiz.<br/>
+      <strong>Çözüm:</strong> Prop kaldırıldı; <code>initial={{ '{' }}opacity: 0, height: 0{'}' }}</code> yeterlidir.
+    </div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/admin/messages/page.tsx:208,241</div>
+    <div class="fix-desc">
+      <strong>Hata:</strong> <code>msg.source</code> (<code>string | null | undefined</code>) index tipi olarak kullanılamaz; <code>msg.is_read</code> (<code>boolean | undefined</code>) boolean gerektiren parametreye geçilemez.<br/>
+      <strong>Çözüm:</strong> <code>sourceLabel[msg.source ?? '']</code> ve <code>toggleRead(msg.id, !!msg.is_read)</code>.
+    </div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/api/admin/content/route.ts:60</div>
+    <div class="fix-desc">
+      <strong>Hata:</strong> Bu Next.js versiyonunda <code>revalidateTag</code> imzası farklı argüman sayısı bekliyor.<br/>
+      <strong>Çözüm:</strong> <code>(revalidateTag as (tag: string) =&gt; void)('page-content')</code> type cast ile çözüldü.
+    </div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/admin/editor/[slug]/page.tsx — BizKimizIconPicker</div>
+    <div class="fix-desc">
+      <strong>Hata:</strong> 4 lokasyonda <code>value={'{g(...)}'} onChange={'{ ()=>{} }'}</code> prop'ları ile çağrılıyor; bileşen <code>g: GetVal</code> bekliyor.<br/>
+      <strong>Çözüm:</strong> <code>value/onChange</code> prop'ları kaldırıldı; <code>g={'{ g }'}</code> ile değiştirildi.
+    </div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/admin/editor/[slug]/page.tsx — g() fallback</div>
+    <div class="fix-desc">
+      <strong>Hata:</strong> Footer/navbar editörlerinde <code>g(sectionId, fieldId, fallback)</code> 3 argümanla çağrılıyor; fonksiyon 2 argüman kabul ediyor.<br/>
+      <strong>Çözüm:</strong> <code>g</code> fonksiyon imzasına <code>fallback = ''</code> opsiyonel parametre eklendi; return sonunda <code>fallback</code> kullanıldı.
+    </div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-file">src/app/(site)/basvuru/page.tsx — Suspense Boundary</div>
+    <div class="fix-desc">
+      <strong>Hata:</strong> Vercel pre-render aşamasında <code>useSearchParams()</code> Suspense sınırı olmadan çağrıldı; build fail oluyor.<br/>
+      <strong>Çözüm:</strong> <code>BasvuruPageInner</code> bileşeni oluşturuldu; default export <code>&lt;Suspense&gt;&lt;BasvuruPageInner /&gt;&lt;/Suspense&gt;</code> ile sarıldı.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     11. DEPLOYMENT VE CI/CD
+═══════════════════════════════════════════════════════════════ -->
+<div class="page" style="page-break-after: auto">
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="section-eyebrow">Bölüm 11</div>
+      <h2 class="section-title">Deployment ve CI/CD</h2>
+    </div>
+    <span class="page-chip">🚀 Vercel</span>
+  </div>
+
+  <p>
+    Proje GitHub → Vercel entegrasyonu ile sürekli deployment pipeline'ına sahiptir.
+    <code>main</code> branch'e her push sonrası Vercel otomatik build başlatır.
+  </p>
+
+  <h3>Build Süreci</h3>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-label">1. Kod Push</div>
+      <p class="timeline-desc"><code>git push origin main</code> → GitHub <code>acebeciogluedtech/city-turizm</code> repository'sine yazılır.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">2. Vercel Build Tetiklenir</div>
+      <p class="timeline-desc">Vercel webhook GitHub'dan build isteği alır. Washington DC (iad1) bölgesinde Turbo Build Machine (30 core, 60 GB) devreye girer.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">3. npm install</div>
+      <p class="timeline-desc">384 paket yüklenir (~8 saniye).</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">4. next build (Turbopack)</div>
+      <p class="timeline-desc">TypeScript derleme (~7 saniye), statik sayfa üretimi (58 route, 29 worker paralel), optimize edilmiş chunks.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">5. Deployment</div>
+      <p class="timeline-desc">Build başarılı olursa production domain'ine otomatik yayınlanır.</p>
+    </div>
+  </div>
+
+  <h3>Ortam Değişkenleri</h3>
+
+  <table>
+    <thead>
+      <tr><th>Değişken</th><th>Kullanım Yeri</th><th>Açıklama</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>NEXT_PUBLIC_SUPABASE_URL</code></td><td>Client + Server</td><td>Supabase proje URL'si</td></tr>
+      <tr><td><code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code></td><td>Client</td><td>Public anon key (RLS korumalı)</td></tr>
+      <tr><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td>Server only (API routes)</td><td>Tam yetki service role key — asla client'a açılmaz</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn-box">
+    <div class="info-icon">⚠️</div>
+    <p class="warn-text">
+      <strong>Güvenlik:</strong> <code>SUPABASE_SERVICE_ROLE_KEY</code> yalnızca server-side API route'larında (<code>supabase-admin.ts</code>) kullanılır.
+      Bu key <code>NEXT_PUBLIC_</code> prefix'i olmadığından client bundle'a dahil edilmez.
+      RLS politikaları, public API ile yapılabilecek işlemleri sınırlandırır.
+    </p>
+  </div>
+
+  <h3>Build Gereksinimleri</h3>
+  <ul>
+    <li><strong>TypeScript strict mode:</strong> Tüm tip hataları build'i durdurur; <code>any</code> implicit kullanımı yasaktır</li>
+    <li><strong>Suspense boundary:</strong> <code>useSearchParams()</code> kullanan her client bileşen <code>&lt;Suspense&gt;</code> ile sarılmalıdır</li>
+    <li><strong>Framer Motion ease tipleri:</strong> Bezier eğrisi dizileri <code>[number, number, number, number]</code> tuple olarak cast edilmelidir</li>
+    <li><strong>Motion prop'ları:</strong> Yalnızca resmi Framer Motion prop'ları kullanılabilir; <code>initialOpacity</code> gibi non-standard prop'lar derleme hatasına neden olur</li>
+  </ul>
+
+  <h3>Repository Bilgileri</h3>
+  <div class="card">
+    <div class="card-title">Git</div>
+    <p>
+      <strong>Repository:</strong> <code>https://github.com/acebeciogluedtech/city-turizm.git</code><br/>
+      <strong>Branch:</strong> <code>main</code> (tek branch, doğrudan production)<br/>
+      <strong>Toplam Commit:</strong> İlk setup commit + feature commit'leri<br/>
+      <strong>Son Commit:</strong> Vercel build hataları düzeltildi, Suspense boundary eklendi
+    </p>
+  </div>
+
+  <div class="info-box">
+    <div class="info-icon">ℹ️</div>
+    <p class="info-text">
+      <strong>Next.js 16 Notu:</strong> Bu proje Next.js 16.2.4 kullanmaktadır. Bu versiyon, bazı API imzalarında ve davranışlarında önceki versiyonlardan farklıdır. <code>revalidateTag</code> tip imzası, <code>useSearchParams</code> Suspense zorunluluğu ve Turbopack default aktif olması bu versiyona özgü önemli noktalardır. Herhangi bir geliştirme yapmadan önce <code>node_modules/next/dist/docs/</code> altındaki güncel dökümantasyon incelenmelidir.
+    </p>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="doc-footer">
+  <span>City Turizm Web Platformu — Teknik Spesifikasyon Dökümanı</span>
+  <span>Versiyon 1.0.0 · Nisan 2026</span>
+  <span>Gizli — Dahili Kullanım</span>
+</div>
+
+</body>
+</html>

@@ -100,7 +100,7 @@ export default function IletisimClient({ initialContent }: Props) {
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-amber-400 to-orange-500" />
 
         {/* Content */}
-        <div className="relative container mx-auto px-6 pt-40 pb-20 z-10">
+        <div className="relative container mx-auto px-4 sm:px-6 pt-32 sm:pt-40 pb-14 sm:pb-20 z-10">
           <div className="max-w-3xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
@@ -115,7 +115,7 @@ export default function IletisimClient({ initialContent }: Props) {
             <motion.h1
               initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.07, ease: [0.16, 1, 0.3, 1] }}
-              className="text-5xl md:text-6xl font-black text-white mb-5 leading-[1.05] tracking-tight"
+              className="text-3xl sm:text-5xl md:text-6xl font-black text-white mb-5 leading-[1.05] tracking-tight"
             >
               {v('hero', 'title', 'Bize Ulaşın')}
             </motion.h1>
@@ -136,7 +136,7 @@ export default function IletisimClient({ initialContent }: Props) {
       ══════════════════════════════════════════════ */}
       <section className="bg-white border-b border-gray-100 shadow-sm">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-gray-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
             {[
               { icon: Headphones, id: 'c1', color: 'text-amber-500',   bg: 'bg-amber-50',   href: `tel:${(v('info_bar', 'c1_value', '4441289')).replace(/\s/g, '')}`,      defLabel: en ? 'Call Center' : 'Call Center', defValue: '444 12 89',              defSub: en ? '24/7 at your service' : '7/24 hizmetinizdeyiz' },
               { icon: Mail,       id: 'c2', color: 'text-blue-500',    bg: 'bg-blue-50',    href: `mailto:${v('info_bar', 'c2_value', 'info@cityturizm.com')}`,            defLabel: en ? 'E-Mail' : 'E-Posta',          defValue: 'info@cityturizm.com',    defSub: en ? 'Reply within 4 hours' : 'En geç 4 saat içinde yanıt' },
@@ -147,13 +147,13 @@ export default function IletisimClient({ initialContent }: Props) {
               const value = v('info_bar', `${card.id}_value`, card.defValue)
               const sub = v('info_bar', `${card.id}_sub`, card.defSub)
               const inner = (
-                <div className="flex items-center gap-4 px-6 py-5">
+                <div className="flex items-center gap-4 px-4 sm:px-6 py-4 sm:py-5">
                   <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0', card.bg)}>
                     <card.icon className={cn('w-5 h-5', card.color)} strokeWidth={1.75} />
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{label}</p>
-                    <p className="text-sm font-black text-gray-900 leading-snug truncate">{value}</p>
+                    <p className="text-sm font-black text-gray-900 leading-snug truncate sm:truncate break-all sm:break-normal">{value}</p>
                     <p className="text-xs text-gray-400 leading-relaxed">{sub}</p>
                   </div>
                 </div>

@@ -246,7 +246,7 @@ function MobileHero({ onApply }: { onApply: () => void }) {
   const titleParts = title.split(/(?<=\.)\s*/)
 
   return (
-    <section className="lg:hidden bg-white pt-[72px]">
+    <section className="lg:hidden bg-white pt-[108px]">
       <div className="relative mx-4 mt-4 rounded-2xl overflow-hidden shadow-xl"
            style={{ height: '56vw', minHeight: 220 }}>
         <VideoFrame />

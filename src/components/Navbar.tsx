@@ -380,32 +380,33 @@ export default function Navbar() {
   return (
     <>
       {/* ── TOP BAR ── */}
-      <div className="hidden lg:block bg-amber-500 text-white text-sm py-2.5 relative z-50">
-        <div className="container mx-auto px-6 flex items-center justify-between">
-          <div className="flex items-center gap-5">
+      <div className="bg-amber-500 text-white text-xs lg:text-sm py-2 lg:py-2.5 relative z-50">
+        <div className="container mx-auto px-4 lg:px-6 flex items-center justify-between">
+          <div className="flex items-center gap-3 lg:gap-5">
             <a href={cm('topbar','phone1_href','tel:4441289')}
-               className="flex items-center gap-2 text-white font-black text-base hover:text-amber-100 transition-colors">
-              <Phone className="w-4 h-4" />
+               className="flex items-center gap-1.5 text-white font-black text-sm lg:text-base hover:text-amber-100 transition-colors">
+              <Phone className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
               <span>{cm('topbar','phone1','444 1 289')}</span>
             </a>
             {cm('topbar','phone2','') && <>
-              <span className="text-amber-300/50 text-xs">|</span>
+              <span className="hidden lg:inline text-amber-300/50 text-xs">|</span>
               <a href={cm('topbar','phone2_href','tel:+902125438097')}
-                 className="flex items-center gap-2 hover:text-amber-100 transition-colors text-white">
+                 className="hidden lg:flex items-center gap-2 hover:text-amber-100 transition-colors text-white">
                 <Phone className="w-3.5 h-3.5" />
                 <span>{cm('topbar','phone2','+90 212 543 80 97')}</span>
               </a>
             </>}
             {cm('topbar','phone3','') && <>
-              <span className="text-white/40 text-xs">|</span>
+              <span className="hidden lg:inline text-white/40 text-xs">|</span>
               <a href={cm('topbar','phone3_href','tel:+902125836161')}
-                 className="flex items-center gap-2 hover:text-amber-100 transition-colors text-white">
+                 className="hidden lg:flex items-center gap-2 hover:text-amber-100 transition-colors text-white">
                 <Phone className="w-3.5 h-3.5" />
                 <span>{cm('topbar','phone3','+90 212 583 61 61')}</span>
               </a>
             </>}
-            <span className="text-white/40 text-xs">|</span>
-            <span className="text-white">{cm('topbar','hours','Pzt – Cmt: 09:00 – 18:00')}</span>
+            <span className="hidden lg:inline text-white/40 text-xs">|</span>
+            <span className="hidden lg:inline text-white">{cm('topbar','hours','Pzt – Cmt: 09:00 – 18:00')}</span>
+            <span className="lg:hidden text-white/80">{cm('topbar','hours','Pzt – Cmt: 09:00 – 18:00')}</span>
           </div>
 
           <div className="flex items-center gap-5">
@@ -436,7 +437,7 @@ export default function Navbar() {
       {/* ── MAIN NAVBAR ── */}
       <nav className={cn(
         'fixed left-0 right-0 z-40 transition-all duration-300 bg-white border-b border-gray-100',
-        isScrolled ? 'top-0 shadow-md' : 'top-0 lg:top-[44px]'
+        isScrolled ? 'top-0 shadow-md' : 'top-[36px] lg:top-[44px]'
       )}>
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between" style={{ height: 72 }}>

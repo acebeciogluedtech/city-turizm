@@ -78,7 +78,7 @@ export default function TurizmAcenteligiClient({ initialContent }: { initialCont
     <main className="min-h-screen bg-white">
 
       {/* ── HERO ── */}
-      <div className="relative bg-gray-900 pt-36 pb-20 overflow-hidden" style={{ minHeight: 480 }}>
+      <div className="relative bg-gray-900 pt-28 sm:pt-36 pb-20 overflow-hidden" style={{ minHeight: 480 }}>
         {v('hero', 'hero_img') && (
           <img src={v('hero', 'hero_img')} alt="" className="absolute inset-0 w-full h-full object-cover object-center animate-fade-in" />
         )}

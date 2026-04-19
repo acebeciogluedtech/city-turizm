@@ -92,7 +92,7 @@ export default function CevreSuPolitikalariClient({ initialContent }: { initialC
     <main className="min-h-screen bg-white">
 
       {/* ── HERO ── */}
-      <div className="relative bg-gray-900 pt-36 pb-20 overflow-hidden" style={{ minHeight: 440 }}>
+      <div className="relative bg-gray-900 pt-28 sm:pt-36 pb-20 overflow-hidden" style={{ minHeight: 440 }}>
         {(
           <img
             src={v('hero', 'hero_img', '/cevre-banner.jpg')}
