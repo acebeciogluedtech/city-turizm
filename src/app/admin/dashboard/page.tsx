@@ -306,7 +306,7 @@ function NotifPopup({
                   {/* Group label */}
                   <div className="flex items-center gap-2 px-5 pb-2">
                     <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${meta.dot}`} />
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest flex-1">
+                    <p className="text-[10px] font-semibold text-gray-500 flex-1">
                       {meta.plural}
                     </p>
                     <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${meta.color}`}>
@@ -397,6 +397,7 @@ export default function Dashboard() {
   const [lastRefresh, setLastRefresh] = useState(new Date())
   const [showPopup, setShowPopup]         = useState(false)
   const [unreadItems, setUnreadItems]     = useState<UnreadItem[]>([])
+  const [greeting, setGreeting]           = useState<string>('')  // client-only — avoids SSR time mismatch
   const [subscriberTotal, setSubscriberTotal] = useState(0)
 
   const load = useCallback(async () => {
@@ -512,13 +513,18 @@ export default function Dashboard() {
     return () => clearInterval(iv)
   }, [load])
 
+  // Compute greeting on client only — avoids SSR/client time mismatch
+  useEffect(() => {
+    const h = new Date().getHours()
+    setGreeting(h < 12 ? 'Günaydın' : h < 18 ? 'İyi günler' : 'İyi akşamlar')
+  }, [])
+
   const totalUnread = (stats?.messages.unread ?? 0)
     + (stats?.quotes.unread ?? 0)
     + (stats?.applications.unread ?? 0)
     + (stats?.subscribers.unread ?? 0)
 
-  const now = new Date()
-  const greeting = now.getHours() < 12 ? 'Günaydın' : now.getHours() < 18 ? 'İyi günler' : 'İyi akşamlar'
+  const now = new Date()  // used for subscriber filtering
 
   // Mark an item as read — persists to DB (or localStorage for subscribers)
   const markAsRead = useCallback(async (id: string, type: UnreadItem['type']) => {
