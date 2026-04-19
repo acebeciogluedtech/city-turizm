@@ -116,7 +116,7 @@ export default function AdminLogin() {
                   onChange={e => setEmail(e.target.value)}
                   onFocus={() => setFocused('email')}
                   onBlur={() => setFocused(null)}
-                  placeholder="admin@cityturizm.com"
+                  placeholder=""
                   className={inputCls('email')}
                   required autoComplete="email"
                 />
@@ -136,7 +136,7 @@ export default function AdminLogin() {
                   onChange={e => setPassword(e.target.value)}
                   onFocus={() => setFocused('password')}
                   onBlur={() => setFocused(null)}
-                  placeholder="••••••••"
+                  placeholder=""
                   className={cn(inputCls('password'), 'pr-11')}
                   required autoComplete="current-password"
                 />
