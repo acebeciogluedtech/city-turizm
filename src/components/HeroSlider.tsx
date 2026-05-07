@@ -293,7 +293,7 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
 
   // Video card: right edge anchored, left edge moves 43% → 0%
   const cardLeft   = useTransform(scrollYProgress, [0, 1], ['43%', '0%'])
-  const cardTop    = useTransform(scrollYProgress, [0, 1], ['70px', '0px'])
+  const cardTop    = useTransform(scrollYProgress, [0, 1], ['128px', '0px'])
   const cardBottom = useTransform(scrollYProgress, [0, 1], ['40px', '0px'])
   const cardRight  = useTransform(scrollYProgress, [0, 1], ['1.5%', '0%'])
   const cardRadius = useTransform(scrollYProgress, [0, 0.8], ['24px', '0px'])
@@ -306,9 +306,7 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
   const overlayOp   = useTransform(scrollYProgress, [0.8, 1], [0, 1])
 
   return (
-    // h-screen: hero occupies exactly one viewport in document flow.
-    // No sticky needed — wheel events are intercepted directly.
-    <div className="relative h-screen overflow-hidden bg-white">
+    <div className="relative h-screen bg-white">
 
       {/* Sol metin */}
       <motion.div

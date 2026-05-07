@@ -379,8 +379,8 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ── TOP BAR ── */}
-      <div className="hidden lg:block bg-amber-500 text-white text-xs lg:text-sm py-2 lg:py-2.5 relative z-30">
+      {/* ── TOP BAR ── always fixed at top */}
+      <div className="hidden lg:flex fixed top-0 left-0 right-0 z-40 bg-amber-500 text-white text-xs lg:text-sm py-2 lg:py-2.5">
         <div className="container mx-auto px-4 lg:px-6 flex items-center justify-between">
           <div className="flex items-center gap-3 lg:gap-5">
             <a href={cm('topbar','phone1_href','tel:4441289')}
@@ -437,7 +437,8 @@ export default function Navbar() {
       {/* ── MAIN NAVBAR ── */}
       <nav className={cn(
         'fixed left-0 right-0 z-50 transition-all duration-300 bg-white border-b border-gray-100',
-        isScrolled ? 'top-0 shadow-md' : 'top-0 lg:top-[44px]'
+        'top-0 lg:top-[44px]',
+        isScrolled && 'shadow-md'
       )}>
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between" style={{ height: 72 }}>
