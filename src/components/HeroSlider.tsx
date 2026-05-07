@@ -372,9 +372,9 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
   })
 
   const cardTop    = useTransform(scrollYProgress, [0, 0.7], ['80px', '0px'])
+  const cardLeft   = useTransform(scrollYProgress, [0, 0.7], ['43%', '0%'])
   const cardRight  = useTransform(scrollYProgress, [0, 0.7], ['2%', '0%'])
   const cardBottom = useTransform(scrollYProgress, [0, 0.7], ['50px', '0px'])
-  const cardWidth  = useTransform(scrollYProgress, [0, 0.7], ['57%', '100%'])
   const cardRadius = useTransform(scrollYProgress, [0, 0.55], ['24px', '0px'])
   const textOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0])
   const textX       = useTransform(scrollYProgress, [0, 0.35], [0, -50])
@@ -415,7 +415,7 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
 
         {/* Sağ video kart */}
         <motion.div
-          style={{ top: cardTop, right: cardRight, bottom: cardBottom, width: cardWidth, borderRadius: cardRadius }}
+          style={{ top: cardTop, left: cardLeft, right: cardRight, bottom: cardBottom, borderRadius: cardRadius }}
           className="absolute z-20 overflow-hidden shadow-2xl shadow-black/15"
         >
           <VideoFrame />
