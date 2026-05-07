@@ -300,18 +300,6 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
         className="absolute z-20 overflow-hidden shadow-2xl shadow-black/15"
       >
         <VideoFrame />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
-        <motion.div style={{ opacity: overlayOp }} className="absolute bottom-12 left-12 right-12 z-30 pointer-events-none">
-          <RotatingTag dark />
-          <h2 className="text-5xl lg:text-6xl font-black text-white leading-tight mb-3">
-            {titleParts.map((p, i) => <span key={i}>{p}{i < titleParts.length - 1 && <br />}</span>)}
-          </h2>
-          <p className="text-white/70 text-base mb-6">{desc}</p>
-          <button onClick={onApply} className="pointer-events-auto inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-bold text-sm px-7 py-4 rounded-2xl transition-all shadow-lg shadow-amber-500/30">
-            {cta}
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </motion.div>
       </motion.div>
 
       <ScrollIndicator progress={scrollYProgress} scrollHint={scrollHint} />
