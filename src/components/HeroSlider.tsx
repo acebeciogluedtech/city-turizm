@@ -371,53 +371,35 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
     offset: ['start start', 'end end'],
   })
 
-  // h-[380vh] → sticky period = 280vh. Animation plays over same 126vh as original
-  // (keyframes scaled ×0.6429 so visual speed is identical), then 154vh hold at full-screen.
+  // Video card: starts on the left side (~55% width), anchored to left edge with inset,
+  // then expands leftward to fill the entire screen.
+  // h-[380vh] gives enough scroll distance: ~45% for animation, rest holds at full-screen.
   const cardTop    = useTransform(scrollYProgress, [0, 0.45], ['80px', '0px'])
-  const cardRight  = useTransform(scrollYProgress, [0, 0.45], ['2%', '0%'])
+  const cardLeft   = useTransform(scrollYProgress, [0, 0.45], ['2%', '0%'])
   const cardBottom = useTransform(scrollYProgress, [0, 0.45], ['50px', '0px'])
-  const cardWidth  = useTransform(scrollYProgress, [0, 0.45], ['57%', '100%'])
+  const cardWidth  = useTransform(scrollYProgress, [0, 0.45], ['55%', '100%'])
   const cardRadius = useTransform(scrollYProgress, [0, 0.35], ['24px', '0px'])
+
+  // Right-side text fades out and slides right as video expands
   const textOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0])
-  const textX       = useTransform(scrollYProgress, [0, 0.22], [0, -50])
+  const textX       = useTransform(scrollYProgress, [0, 0.22], [0, 60])
+
+  // Overlay text on video fades in after expansion completes
   const overlayOp   = useTransform(scrollYProgress, [0.42, 0.55], [0, 1])
+
   return (
     <div ref={containerRef} className="relative h-[380vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-white">
 
-        {/* Sol metin */}
+        {/* Sol video kart — sol tarafta başlar, sola doğru genişler */}
         <motion.div
-          style={{ opacity: textOpacity, x: textX, paddingTop: NAV_HEIGHT }}
-          className="absolute inset-y-0 left-0 z-10 flex flex-col justify-center
-                     w-[43%] px-16 xl:px-20 pointer-events-none"
-        >
-          <RotatingTag />
-
-          <h1 className="text-5xl xl:text-[3.5rem] 2xl:text-6xl font-black text-gray-900
-                         leading-[1.05] mb-5">
-            {titleParts.map((p, i) => <span key={i}>{p}{i < titleParts.length - 1 && <br />}</span>)}
-          </h1>
-
-          <p className="text-gray-500 text-base leading-relaxed mb-8 max-w-sm">{desc}</p>
-
-          <HeroStats />
-
-          <div className="pointer-events-auto">
-            <button
-              onClick={onApply}
-              className="group inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600
-                         text-white font-bold text-sm px-7 py-4 rounded-2xl
-                         transition-all shadow-lg shadow-amber-500/25 hover:-translate-y-0.5"
-            >
-              {cta}
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Sağ video kart */}
-        <motion.div
-          style={{ top: cardTop, right: cardRight, bottom: cardBottom, width: cardWidth, borderRadius: cardRadius }}
+          style={{
+            top: cardTop,
+            left: cardLeft,
+            bottom: cardBottom,
+            width: cardWidth,
+            borderRadius: cardRadius,
+          }}
           className="absolute z-20 overflow-hidden shadow-2xl shadow-black/15"
         >
           <VideoFrame />
@@ -446,8 +428,39 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
           </motion.div>
         </motion.div>
 
+        {/* Sağ metin — sağ tarafta, video genişledikçe kaybolur */}
+        <motion.div
+          style={{ opacity: textOpacity, x: textX, paddingTop: NAV_HEIGHT }}
+          className="absolute inset-y-0 right-0 z-10 flex flex-col justify-center
+                     w-[45%] px-16 xl:px-20 pointer-events-none"
+        >
+          <RotatingTag />
+
+          <h1 className="text-5xl xl:text-[3.5rem] 2xl:text-6xl font-black text-gray-900
+                         leading-[1.05] mb-5">
+            {titleParts.map((p, i) => <span key={i}>{p}{i < titleParts.length - 1 && <br />}</span>)}
+          </h1>
+
+          <p className="text-gray-500 text-base leading-relaxed mb-8 max-w-sm">{desc}</p>
+
+          <HeroStats />
+
+          <div className="pointer-events-auto">
+            <button
+              onClick={onApply}
+              className="group inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600
+                         text-white font-bold text-sm px-7 py-4 rounded-2xl
+                         transition-all shadow-lg shadow-amber-500/25 hover:-translate-y-0.5"
+            >
+              {cta}
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </motion.div>
+
         {/* Centered scroll-down indicator */}
-        <ScrollIndicator progress={scrollYProgress} scrollHint={scrollHint} />      </div>
+        <ScrollIndicator progress={scrollYProgress} scrollHint={scrollHint} />
+      </div>
     </div>
   )
 }
