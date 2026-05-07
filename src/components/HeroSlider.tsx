@@ -161,7 +161,7 @@ function VideoFrame({ onPlayerReady }: { onPlayerReady?: (p: any) => void } = {}
   return (
     <div className="absolute inset-0 bg-black overflow-hidden">
       {/* Iframe wrapper — visibility:hidden until playing, ensures YouTube UI never shows */}
-      <div style={{ position: 'absolute', inset: '-8px', overflow: 'hidden', pointerEvents: 'none', visibility: isReady ? 'visible' : 'hidden' }}>
+      <div style={{ position: 'absolute', top: '-8px', right: '-8px', bottom: '-8px', left: '-8px', overflow: 'hidden', pointerEvents: 'none', visibility: isReady ? 'visible' : 'hidden' }}>
         <div
           id={pid}
           className="absolute border-0"
@@ -178,6 +178,7 @@ function VideoFrame({ onPlayerReady }: { onPlayerReady?: (p: any) => void } = {}
       <div className="absolute inset-0 z-10" style={{ cursor: 'default' }} />
       {/* Black cover — hides YouTube's native play button / loading UI until video plays */}
       <div
+        suppressHydrationWarning
         className="absolute inset-0 z-20 bg-black transition-opacity duration-500"
         style={{ opacity: isReady ? 0 : 1, pointerEvents: 'none' }}
       />
