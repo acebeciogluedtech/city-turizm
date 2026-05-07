@@ -366,23 +366,33 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
 
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // Disable smooth scroll while inside hero so sticky scroll-driven animation works correctly
+  useEffect(() => {
+    const html = document.documentElement
+    html.style.scrollBehavior = 'auto'
+    return () => { html.style.scrollBehavior = '' }
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  // Video card: starts on the left side (~55% width), anchored to left edge with inset,
-  // then expands leftward to fill the entire screen.
-  // h-[380vh] gives enough scroll distance: ~45% for animation, rest holds at full-screen.
-  const cardTop    = useTransform(scrollYProgress, [0, 0.45], ['80px', '0px'])
-  const cardLeft   = useTransform(scrollYProgress, [0, 0.45], ['2%', '0%'])
-  const cardBottom = useTransform(scrollYProgress, [0, 0.45], ['50px', '0px'])
-  const cardWidth  = useTransform(scrollYProgress, [0, 0.45], ['55%', '100%'])
-  const cardRadius = useTransform(scrollYProgress, [0, 0.35], ['24px', '0px'])
+  // ── Video reveal via clipPath ──
+  // The video is always rendered at full viewport size (inset:0).
+  // We use clipPath: inset(top right bottom left round radius) to mask it.
+  // Initially: only the right ~55% is visible (left clipped at 43%).
+  // On scroll: left clip moves from 43% → 0%, top/bottom insets shrink, radius flattens.
+  // This ensures the video content is ALWAYS fully visible within the revealed window.
+  const clipLeft   = useTransform(scrollYProgress, [0, 0.45], [43, 0])   // % from left
+  const clipTop    = useTransform(scrollYProgress, [0, 0.45], [5, 0])    // % from top  (≈ 80px on 1080p)
+  const clipBottom = useTransform(scrollYProgress, [0, 0.45], [3.5, 0])  // % from bottom (≈ 50px)
+  const clipRight  = useTransform(scrollYProgress, [0, 0.45], [1.5, 0])  // % from right (≈ 2%)
+  const clipRadius = useTransform(scrollYProgress, [0, 0.35], [24, 0])   // px border-radius
 
-  // Right-side text fades out and slides right as video expands
+  // Left-side text fades out and slides left as video expands over it
   const textOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0])
-  const textX       = useTransform(scrollYProgress, [0, 0.22], [0, 60])
+  const textX       = useTransform(scrollYProgress, [0, 0.22], [0, -50])
 
   // Overlay text on video fades in after expansion completes
   const overlayOp   = useTransform(scrollYProgress, [0.42, 0.55], [0, 1])
@@ -391,16 +401,46 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
     <div ref={containerRef} className="relative h-[380vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-white">
 
-        {/* Sol video kart — sol tarafta başlar, sola doğru genişler */}
+        {/* Sol metin — solda başlar, video genişledikçe kaybolur */}
         <motion.div
+          style={{ opacity: textOpacity, x: textX, paddingTop: NAV_HEIGHT }}
+          className="absolute inset-y-0 left-0 z-10 flex flex-col justify-center
+                     w-[43%] px-16 xl:px-20 pointer-events-none"
+        >
+          <RotatingTag />
+
+          <h1 className="text-5xl xl:text-[3.5rem] 2xl:text-6xl font-black text-gray-900
+                         leading-[1.05] mb-5">
+            {titleParts.map((p, i) => <span key={i}>{p}{i < titleParts.length - 1 && <br />}</span>)}
+          </h1>
+
+          <p className="text-gray-500 text-base leading-relaxed mb-8 max-w-sm">{desc}</p>
+
+          <HeroStats />
+
+          <div className="pointer-events-auto">
+            <button
+              onClick={onApply}
+              className="group inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600
+                         text-white font-bold text-sm px-7 py-4 rounded-2xl
+                         transition-all shadow-lg shadow-amber-500/25 hover:-translate-y-0.5"
+            >
+              {cta}
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Sağ video — tam ekran boyutunda render edilir, clipPath ile sağdan sola açılır */}
+        <motion.div
+          className="absolute inset-0 z-20"
           style={{
-            top: cardTop,
-            left: cardLeft,
-            bottom: cardBottom,
-            width: cardWidth,
-            borderRadius: cardRadius,
+            clipPath: useTransform(
+              [clipTop, clipRight, clipBottom, clipLeft, clipRadius] as MotionValue[],
+              ([t, r, b, l, rad]: number[]) =>
+                `inset(${t}% ${r}% ${b}% ${l}% round ${rad}px)`
+            ),
           }}
-          className="absolute z-20 overflow-hidden shadow-2xl shadow-black/15"
         >
           <VideoFrame />
 
@@ -426,36 +466,6 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
               <ChevronRight className="w-4 h-4" />
             </button>
           </motion.div>
-        </motion.div>
-
-        {/* Sağ metin — sağ tarafta, video genişledikçe kaybolur */}
-        <motion.div
-          style={{ opacity: textOpacity, x: textX, paddingTop: NAV_HEIGHT }}
-          className="absolute inset-y-0 right-0 z-10 flex flex-col justify-center
-                     w-[45%] px-16 xl:px-20 pointer-events-none"
-        >
-          <RotatingTag />
-
-          <h1 className="text-5xl xl:text-[3.5rem] 2xl:text-6xl font-black text-gray-900
-                         leading-[1.05] mb-5">
-            {titleParts.map((p, i) => <span key={i}>{p}{i < titleParts.length - 1 && <br />}</span>)}
-          </h1>
-
-          <p className="text-gray-500 text-base leading-relaxed mb-8 max-w-sm">{desc}</p>
-
-          <HeroStats />
-
-          <div className="pointer-events-auto">
-            <button
-              onClick={onApply}
-              className="group inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600
-                         text-white font-bold text-sm px-7 py-4 rounded-2xl
-                         transition-all shadow-lg shadow-amber-500/25 hover:-translate-y-0.5"
-            >
-              {cta}
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
         </motion.div>
 
         {/* Centered scroll-down indicator */}
