@@ -21,7 +21,7 @@ a > span > img {
 }
 
 html {
-  overflow-x: hidden;
+  /* overflow-x:hidden removed — it clips absolutely positioned card shadows */
 }
 
 /* ── Body ── */

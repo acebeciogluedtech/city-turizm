@@ -160,8 +160,8 @@ function VideoFrame({ onPlayerReady }: { onPlayerReady?: (p: any) => void } = {}
 
   return (
     <div className="absolute inset-0 bg-black overflow-hidden">
-      {/* Iframe wrapper — pointerEvents:none here so it survives YT.Player's iframe replacement */}
-      <div style={{ position: 'absolute', inset: '-8px', overflow: 'hidden', pointerEvents: 'none' }}>
+      {/* Iframe wrapper — visibility:hidden until playing, ensures YouTube UI never shows */}
+      <div style={{ position: 'absolute', inset: '-8px', overflow: 'hidden', pointerEvents: 'none', visibility: isReady ? 'visible' : 'hidden' }}>
         <div
           id={pid}
           className="absolute border-0"
@@ -233,11 +233,13 @@ function ScrollIndicator({ progress, scrollHint }: { progress: MotionValue<numbe
   })
   return (
     <div style={{ opacity, transition: 'opacity 0.2s ease' }} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center gap-2 pointer-events-none">
-      <span className="text-white/90 text-xs font-semibold tracking-[0.15em] uppercase drop-shadow-lg">{scrollHint}</span>
+      {/* İkon üstte */}
       <div className="relative w-9 h-14 rounded-full border-2 border-white/50 flex justify-center pt-2 backdrop-blur-sm bg-white/5">
         <motion.div className="w-1.5 h-3.5 rounded-full bg-amber-400 shadow-lg shadow-amber-400/50" animate={{ y: [0, 16, 0], opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }} />
         <motion.div className="absolute inset-0 rounded-full border-2 border-amber-400/30" animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0, 0.4] }} transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }} />
       </div>
+      {/* Metin altta */}
+      <span className="text-white/90 text-xs font-semibold tracking-[0.15em] uppercase drop-shadow-lg">{scrollHint}</span>
     </div>
   )
 }
