@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useRef, useEffect, useId, useState } from 'react'
 import ApplicationModal from './ApplicationModal'
-import { motion, useScroll, useTransform, AnimatePresence, useInView, useMotionValueEvent } from 'framer-motion'
+import { motion, useTransform, AnimatePresence, useInView, useMotionValue, useMotionValueEvent } from 'framer-motion'
 import type { MotionValue } from 'framer-motion'
 import { ChevronRight, ArrowDown, Bus, Briefcase, Shield, Heart, Globe, Compass, Crown, Clock, ShieldCheck, Sparkles, Wallet, MapPinned,
   Star, Plane, Mountain, Anchor, Camera, Coffee, Flag, Gem, Leaf, Map, Medal, Music, Palmtree, Rocket, Sun, Trophy, Users, Zap } from 'lucide-react'
@@ -257,10 +257,7 @@ function MobileHero({ onApply }: { onApply: () => void }) {
     else           { p.playVideo();  setIsPlaying(true)  }
   }
 
-  // Cover hides YouTube's native title/play button overlay:
-  // shown while loading, and when the user has paused
   const showCover = !videoReady || !isPlaying
-
   const titleParts = title.split(/(?<=\.)\s*/)
 
   return (
@@ -269,12 +266,10 @@ function MobileHero({ onApply }: { onApply: () => void }) {
            style={{ height: '56vw', minHeight: 220 }}>
         <VideoFrame onPlayerReady={(p) => { playerRef.current = p; setVideoReady(true) }} />
 
-        {/* Black cover: hides YouTube native title/play UI while loading or paused */}
         {showCover && (
           <div className="absolute inset-0 z-20 bg-black" />
         )}
 
-        {/* Play / Pause button — always on top */}
         <button
           onClick={togglePlay}
           aria-label={isPlaying ? 'Videoyu durdur' : 'Videoyu oynat'}
@@ -283,13 +278,11 @@ function MobileHero({ onApply }: { onApply: () => void }) {
                      text-white hover:bg-black/70 active:scale-90 transition-all"
         >
           {isPlaying ? (
-            /* Pause icon */
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
               <rect x="6" y="4" width="4" height="16" rx="1"/>
               <rect x="14" y="4" width="4" height="16" rx="1"/>
             </svg>
           ) : (
-            /* Play icon */
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
               <path d="M8 5.14v14.72a1 1 0 001.5.86l11-7.36a1 1 0 000-1.72l-11-7.36A1 1 0 008 5.14z"/>
             </svg>
@@ -327,9 +320,9 @@ function ScrollIndicator({ progress, scrollHint }: { progress: MotionValue<numbe
 
   useMotionValueEvent(progress, 'change', (v) => {
     if (v < 0.01) setOpacity(0)
-    else if (v < 0.15) setOpacity(v / 0.15)          // 0→0.15: quick fade in as scroll starts
-    else if (v < 0.85) setOpacity(1)                  // 0.15→0.85: fully visible
-    else setOpacity(1 - (v - 0.85) / 0.15)            // 0.85→1.0: fade out
+    else if (v < 0.15) setOpacity(v / 0.15)
+    else if (v < 0.85) setOpacity(1)
+    else setOpacity(1 - (v - 0.85) / 0.15)
   })
 
   return (
@@ -366,42 +359,68 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
 
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // ── Manual scroll progress: avoids html overflow-y:scroll / framer-motion mismatch ──
-  // We read window.scrollY and compare it to the container's offsetTop.
-  // scrollProgress = 0 when container top hits viewport top, 1 when container bottom hits viewport top.
-  // Container is h-[500vh]. Animation plays 0→0.35 (175vh of scroll), then holds full-screen.
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  })
+  // ── Rock-solid manual scroll progress tracking ──
+  // getBoundingClientRect is 100% reliable regardless of scroll container (html vs body).
+  // progress = 0: container top just hit viewport top (animation starts)
+  // progress = 1: container has been scrolled through completely
+  // Container is h-[500vh]. Animation plays 0→35% (= first 175vh of scroll).
+  // The sticky div stays pinned the entire 500vh; after 35% video is full-screen and holds.
+  const scrollYProgress = useMotionValue(0)
 
-  // Video card: right edge fixed at right side, left edge animates 43% → 0%
+  useEffect(() => {
+    // Disable smooth scroll — required so sticky doesn't "drift" during fast scroll
+    document.documentElement.style.scrollBehavior = 'auto'
+
+    const update = () => {
+      const el = containerRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      // rect.top starts at 0 (container top at viewport top) and goes negative as we scroll down
+      const scrolledIntoContainer = -rect.top
+      // Total distance user must scroll to move from start to end of container (minus one viewport)
+      const totalScrollable = el.offsetHeight - window.innerHeight
+      const p = totalScrollable > 0
+        ? Math.max(0, Math.min(1, scrolledIntoContainer / totalScrollable))
+        : 0
+      scrollYProgress.set(p)
+    }
+
+    window.addEventListener('scroll', update, { passive: true })
+    update() // set initial value
+
+    return () => {
+      window.removeEventListener('scroll', update)
+      document.documentElement.style.scrollBehavior = ''
+    }
+  }, [scrollYProgress])
+
+  // ── Animation transforms ──
+  // Video card starts at right side, ~57% width (left=43%).
+  // As progress goes 0→0.35 (first 175vh of scroll):
+  //   - left: 43% → 0%  (video expands to cover full width)
+  //   - top/bottom insets shrink to 0
+  //   - border-radius goes from 24px → 0px
+  // After 0.35: all values are clamped at final state, video stays full-screen.
   const cardLeft   = useTransform(scrollYProgress, [0, 0.35], ['43%', '0%'])
   const cardTop    = useTransform(scrollYProgress, [0, 0.35], ['70px', '0px'])
   const cardBottom = useTransform(scrollYProgress, [0, 0.35], ['40px', '0px'])
   const cardRight  = useTransform(scrollYProgress, [0, 0.35], ['1.5%', '0%'])
   const cardRadius = useTransform(scrollYProgress, [0, 0.28], ['24px', '0px'])
 
-  // Left text fades out fast (first 18% of scroll)
+  // Left text fades out and slides left while video expands (first 18% = ~63vh)
   const textOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0])
   const textX       = useTransform(scrollYProgress, [0, 0.18], [0, -50])
 
-  // Overlay text on video fades in after video is fully expanded
+  // Overlay content on video fades in after video fully expands
   const overlayOp   = useTransform(scrollYProgress, [0.35, 0.45], [0, 1])
 
-  // Disable smooth scroll — required for sticky+scroll-driven animation to work
-  useEffect(() => {
-    document.documentElement.style.scrollBehavior = 'auto'
-    return () => { document.documentElement.style.scrollBehavior = '' }
-  }, [])
-
   return (
-    // h-[500vh]: 100vh is the visible sticky section, 400vh is the "scroll budget"
-    // Animation uses 0→35% = 175vh of scroll. Then 175–400vh the video holds full-screen.
+    // h-[500vh]: the sticky child (h-screen) stays pinned as user scrolls through all 500vh.
+    // Animation plays in first 35% (175vh), then holds. Section unpins after all 500vh.
     <div ref={containerRef} className="relative h-[500vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-white">
 
-        {/* Sol metin — solda sabit, video genişledikçe kaybolur */}
+        {/* Sol metin — video genişledikçe sola kayarak kaybolur */}
         <motion.div
           style={{ opacity: textOpacity, x: textX, paddingTop: NAV_HEIGHT }}
           className="absolute inset-y-0 left-0 z-10 flex flex-col justify-center
@@ -431,7 +450,7 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
           </div>
         </motion.div>
 
-        {/* Sağ video kart — right sabit, left 43%→0% açılıyor */}
+        {/* Sağ video kart — sağ kenara sabit, left 43%→0% ile sola açılır */}
         <motion.div
           style={{
             left: cardLeft,
@@ -468,7 +487,7 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
           </motion.div>
         </motion.div>
 
-        {/* Scroll-down indicator */}
+        {/* Scroll indicator */}
         <ScrollIndicator progress={scrollYProgress} scrollHint={scrollHint} />
       </div>
     </div>
