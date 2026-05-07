@@ -263,8 +263,6 @@ function MobileHero({ onApply }: { onApply: () => void }) {
       <div className="relative mx-4 mt-4 rounded-2xl overflow-hidden shadow-xl"
            style={{ height: '56vw', minHeight: 220 }}>
         <VideoFrame onPlayerReady={(p) => { playerRef.current = p }} />
-        <div className="absolute inset-x-0 bottom-0 h-20
-                        bg-gradient-to-t from-black/50 to-transparent z-20 pointer-events-none" />
 
         {/* Play / Pause button — mobile only */}
         <button
@@ -290,8 +288,6 @@ function MobileHero({ onApply }: { onApply: () => void }) {
       </div>
 
       <div className="px-5 pt-7 pb-6">
-        <RotatingTag />
-
         <h1 className="text-3xl font-black text-gray-900 leading-tight mb-3">
           {titleParts.map((p, i) => <span key={i}>{p}{i < titleParts.length - 1 && <br />}</span>)}
         </h1>
