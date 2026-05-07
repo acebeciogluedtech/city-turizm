@@ -366,40 +366,42 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
 
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Disable smooth scroll while inside hero so sticky scroll-driven animation works correctly
-  useEffect(() => {
-    const html = document.documentElement
-    html.style.scrollBehavior = 'auto'
-    return () => { html.style.scrollBehavior = '' }
-  }, [])
-
+  // ── Manual scroll progress: avoids html overflow-y:scroll / framer-motion mismatch ──
+  // We read window.scrollY and compare it to the container's offsetTop.
+  // scrollProgress = 0 when container top hits viewport top, 1 when container bottom hits viewport top.
+  // Container is h-[500vh]. Animation plays 0→0.35 (175vh of scroll), then holds full-screen.
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  // ── BAU Campus style: video card positioned with right:0 fixed, left transitions ──
-  // The card is absolutely positioned with right always at the right edge.
-  // `left` starts at 43% (making the card ~57% wide) and transitions to 0% (full width).
-  // This creates a natural left-expansion effect.
-  const cardLeft   = useTransform(scrollYProgress, [0, 0.45], ['43%', '0%'])
-  const cardTop    = useTransform(scrollYProgress, [0, 0.45], ['70px', '0px'])
-  const cardBottom = useTransform(scrollYProgress, [0, 0.45], ['40px', '0px'])
-  const cardRight  = useTransform(scrollYProgress, [0, 0.45], ['1.5%', '0%'])
-  const cardRadius = useTransform(scrollYProgress, [0, 0.35], ['24px', '0px'])
+  // Video card: right edge fixed at right side, left edge animates 43% → 0%
+  const cardLeft   = useTransform(scrollYProgress, [0, 0.35], ['43%', '0%'])
+  const cardTop    = useTransform(scrollYProgress, [0, 0.35], ['70px', '0px'])
+  const cardBottom = useTransform(scrollYProgress, [0, 0.35], ['40px', '0px'])
+  const cardRight  = useTransform(scrollYProgress, [0, 0.35], ['1.5%', '0%'])
+  const cardRadius = useTransform(scrollYProgress, [0, 0.28], ['24px', '0px'])
 
-  // Left-side text fades out and slides left as video expands over it
-  const textOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0])
-  const textX       = useTransform(scrollYProgress, [0, 0.22], [0, -50])
+  // Left text fades out fast (first 18% of scroll)
+  const textOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0])
+  const textX       = useTransform(scrollYProgress, [0, 0.18], [0, -50])
 
-  // Overlay text on video fades in after expansion completes
-  const overlayOp   = useTransform(scrollYProgress, [0.42, 0.55], [0, 1])
+  // Overlay text on video fades in after video is fully expanded
+  const overlayOp   = useTransform(scrollYProgress, [0.35, 0.45], [0, 1])
+
+  // Disable smooth scroll — required for sticky+scroll-driven animation to work
+  useEffect(() => {
+    document.documentElement.style.scrollBehavior = 'auto'
+    return () => { document.documentElement.style.scrollBehavior = '' }
+  }, [])
 
   return (
-    <div ref={containerRef} className="relative h-[380vh]">
+    // h-[500vh]: 100vh is the visible sticky section, 400vh is the "scroll budget"
+    // Animation uses 0→35% = 175vh of scroll. Then 175–400vh the video holds full-screen.
+    <div ref={containerRef} className="relative h-[500vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-white">
 
-        {/* Sol metin — solda başlar, video genişledikçe kaybolur */}
+        {/* Sol metin — solda sabit, video genişledikçe kaybolur */}
         <motion.div
           style={{ opacity: textOpacity, x: textX, paddingTop: NAV_HEIGHT }}
           className="absolute inset-y-0 left-0 z-10 flex flex-col justify-center
@@ -429,7 +431,7 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
           </div>
         </motion.div>
 
-        {/* Sağ video kart — right:0 sabit, left animasyonla 43% → 0% geçiş yapar */}
+        {/* Sağ video kart — right sabit, left 43%→0% açılıyor */}
         <motion.div
           style={{
             left: cardLeft,
@@ -437,14 +439,13 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
             top: cardTop,
             bottom: cardBottom,
             borderRadius: cardRadius,
-            willChange: 'left, right, top, bottom, border-radius',
           }}
           className="absolute z-20 overflow-hidden shadow-2xl shadow-black/15"
         >
           <VideoFrame />
 
-          <div className="absolute inset-x-0 bottom-0 h-36
-                          bg-gradient-to-t from-black/55 to-transparent z-20 pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-40
+                          bg-gradient-to-t from-black/60 to-transparent z-20 pointer-events-none" />
 
           <motion.div
             style={{ opacity: overlayOp }}
@@ -467,7 +468,7 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
           </motion.div>
         </motion.div>
 
-        {/* Centered scroll-down indicator */}
+        {/* Scroll-down indicator */}
         <ScrollIndicator progress={scrollYProgress} scrollHint={scrollHint} />
       </div>
     </div>
