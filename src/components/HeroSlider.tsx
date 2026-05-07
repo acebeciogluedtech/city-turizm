@@ -371,21 +371,20 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
     offset: ['start start', 'end end'],
   })
 
-  const cardTop    = useTransform(scrollYProgress, [0, 0.7], ['80px', '0px'])
-  const cardLeft   = useTransform(scrollYProgress, [0, 0.7], ['43%', '0%'])
-  const cardRight  = useTransform(scrollYProgress, [0, 0.7], ['2%', '0%'])
-  const cardBottom = useTransform(scrollYProgress, [0, 0.7], ['50px', '0px'])
-  const cardRadius = useTransform(scrollYProgress, [0, 0.55], ['24px', '0px'])
-  const textOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0])
-  const textX       = useTransform(scrollYProgress, [0, 0.35], [0, -50])
-  const overlayOp   = useTransform(scrollYProgress, [0.65, 0.85], [0, 1])
+  // Card expands horizontally only — no vertical movement.
+  // Container is bg-black so any uncovered area is dark, never white.
+  const cardLeft   = useTransform(scrollYProgress, [0, 0.65], ['43%', '0%'])
+  const cardRadius = useTransform(scrollYProgress, [0, 0.5],  ['24px', '0px'])
+  const textOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const textX       = useTransform(scrollYProgress, [0, 0.3], [0, -50])
+  const overlayOp   = useTransform(scrollYProgress, [0.6, 0.8], [0, 1])
   return (
     <div ref={containerRef} className="relative h-[280vh]">
-      <div className="sticky top-0 h-screen overflow-hidden bg-white">
+      <div className="sticky top-0 h-screen overflow-hidden bg-black">
 
-        {/* Sol metin */}
+        {/* Sol metin — kendi beyaz arka planıyla birlikte soluklaşır */}
         <motion.div
-          style={{ opacity: textOpacity, x: textX, paddingTop: NAV_HEIGHT }}
+          style={{ opacity: textOpacity, x: textX, paddingTop: NAV_HEIGHT, backgroundColor: 'white' }}
           className="absolute inset-y-0 left-0 z-10 flex flex-col justify-center
                      w-[43%] px-16 xl:px-20 pointer-events-none"
         >
@@ -413,10 +412,10 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
           </div>
         </motion.div>
 
-        {/* Sağ video kart */}
+        {/* Video kart — sadece yatay genişler, dikey sabit */}
         <motion.div
-          style={{ top: cardTop, left: cardLeft, right: cardRight, bottom: cardBottom, borderRadius: cardRadius }}
-          className="absolute z-20 overflow-hidden shadow-2xl shadow-black/15"
+          style={{ left: cardLeft, borderRadius: cardRadius, top: 0, right: 0, bottom: 0 }}
+          className="absolute z-20 overflow-hidden"
         >
           <VideoFrame />
 
