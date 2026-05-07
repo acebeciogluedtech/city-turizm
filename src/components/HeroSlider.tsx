@@ -127,10 +127,28 @@ function VideoFrame({ onPlayerReady }: { onPlayerReady?: (p: any) => void } = {}
       if (window._ytPlayers[pid]) return
       window._ytPlayers[pid] = new window.YT.Player(pid, {
         videoId,
-        playerVars: { autoplay: 1, mute: 1, loop: 1, playlist: videoId, controls: 0, showinfo: 0, rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3, disablekb: 1, start: 15 },
+        playerVars: {
+          autoplay: 1, mute: 1, loop: 1, playlist: videoId,
+          controls: 0,       // no controls bar
+          disablekb: 1,      // no keyboard shortcuts
+          fs: 0,             // no fullscreen button
+          rel: 0,            // no related videos
+          showinfo: 0,       // no title
+          modestbranding: 1, // minimal branding
+          iv_load_policy: 3, // no annotations
+          playsinline: 1,
+          start: 15,
+        },
         events: {
-          onReady: (e: any) => { e.target.setPlaybackQuality('hd1080'); e.target.playVideo(); onPlayerReady?.(e.target) },
-          onPlaybackQualityChange: (e: any) => { if (!['hd1080','hd1440','hd2160'].includes(e.target.getPlaybackQuality())) e.target.setPlaybackQuality('hd1080') },
+          onReady: (e: any) => {
+            e.target.setPlaybackQuality('hd1080')
+            e.target.playVideo()
+            onPlayerReady?.(e.target)
+          },
+          onPlaybackQualityChange: (e: any) => {
+            if (!['hd1080','hd1440','hd2160'].includes(e.target.getPlaybackQuality()))
+              e.target.setPlaybackQuality('hd1080')
+          },
         },
       })
     }
@@ -138,10 +156,26 @@ function VideoFrame({ onPlayerReady }: { onPlayerReady?: (p: any) => void } = {}
     else { const prev = window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady = () => { prev?.(); create() } }
     return () => { window._ytPlayers?.[pid]?.destroy?.(); delete window._ytPlayers?.[pid] }
   }, [pid, videoId])
+
   return (
-    <div className="absolute inset-0 overflow-hidden bg-black">
-      <div id={pid} className="absolute border-0" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '100vw', height: '56.25vw', minHeight: '100%', minWidth: '177.78%', pointerEvents: 'none' }} />
-      <div className="absolute inset-0 z-10" />
+    // overflow-hidden clips the iframe edges where YouTube watermark/UI appears
+    <div className="absolute inset-0 bg-black overflow-hidden">
+      {/* Iframe is slightly oversized — the 8px bleed on each side clips YouTube's logo */}
+      <div style={{ position: 'absolute', inset: '-8px', overflow: 'hidden' }}>
+        <div
+          id={pid}
+          className="absolute border-0"
+          style={{
+            top: '50%', left: '50%',
+            transform: 'translate(-50%,-50%)',
+            width: 'calc(100vw + 16px)', height: '56.25vw',
+            minHeight: 'calc(100% + 16px)', minWidth: '177.78%',
+            pointerEvents: 'none',
+          }}
+        />
+      </div>
+      {/* Full-cover transparent overlay — blocks all mouse interaction with iframe */}
+      <div className="absolute inset-0 z-10" style={{ cursor: 'default' }} />
     </div>
   )
 }
@@ -185,11 +219,12 @@ function MobileHero({ onApply }: { onApply: () => void }) {
 // SCROLL INDICATOR
 // ══════════════════════════════════════════════
 function ScrollIndicator({ progress, scrollHint }: { progress: MotionValue<number>; scrollHint: string }) {
-  const [opacity, setOpacity] = useState(1)
+  const [opacity, setOpacity] = useState(0)
   useMotionValueEvent(progress, 'change', (v) => {
-    if (v < 0.01) setOpacity(1)
-    else if (v < 0.3) setOpacity(1 - v / 0.3)
-    else setOpacity(0)
+    if (v <= 0)        setOpacity(0)                      // başta gizli
+    else if (v < 0.3)  setOpacity(v / 0.3)               // yavaşça belirir
+    else if (v < 0.85) setOpacity(1)                     // tamamen görünür
+    else               setOpacity(1 - (v - 0.85) / 0.15) // azalarak kaybolur
   })
   return (
     <div style={{ opacity, transition: 'opacity 0.2s ease' }} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center gap-2 pointer-events-none">
