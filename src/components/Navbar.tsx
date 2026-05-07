@@ -380,7 +380,7 @@ export default function Navbar() {
   return (
     <>
       {/* ── TOP BAR ── */}
-      <div className="bg-amber-500 text-white text-xs lg:text-sm py-2 lg:py-2.5 relative z-50">
+      <div className="bg-amber-500 text-white text-xs lg:text-sm py-2 lg:py-2.5 relative z-30">
         <div className="container mx-auto px-4 lg:px-6 flex items-center justify-between">
           <div className="flex items-center gap-3 lg:gap-5">
             <a href={cm('topbar','phone1_href','tel:4441289')}
@@ -436,7 +436,7 @@ export default function Navbar() {
 
       {/* ── MAIN NAVBAR ── */}
       <nav className={cn(
-        'fixed left-0 right-0 z-40 transition-all duration-300 bg-white border-b border-gray-100',
+        'fixed left-0 right-0 z-50 transition-all duration-300 bg-white border-b border-gray-100',
         isScrolled ? 'top-0 shadow-md' : 'top-[36px] lg:top-[44px]'
       )}>
         <div className="container mx-auto px-6">
