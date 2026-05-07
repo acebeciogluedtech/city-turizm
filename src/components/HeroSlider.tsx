@@ -160,8 +160,8 @@ function VideoFrame({ onPlayerReady }: { onPlayerReady?: (p: any) => void } = {}
 
   return (
     <div className="absolute inset-0 bg-black overflow-hidden">
-      {/* Iframe slightly oversized — clips YouTube's watermark at edges */}
-      <div style={{ position: 'absolute', inset: '-8px', overflow: 'hidden' }}>
+      {/* Iframe wrapper — pointerEvents:none here so it survives YT.Player's iframe replacement */}
+      <div style={{ position: 'absolute', inset: '-8px', overflow: 'hidden', pointerEvents: 'none' }}>
         <div
           id={pid}
           className="absolute border-0"
@@ -298,8 +298,8 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
 
   // Video card: right edge anchored, left edge moves 43% → 0%
   const cardLeft   = useTransform(scrollYProgress, [0, 1], ['43%', '0%'])
-  const cardTop    = useTransform(scrollYProgress, [0, 1], ['140px', '0px'])
-  const cardBottom = useTransform(scrollYProgress, [0, 1], ['64px', '0px'])
+  const cardTop    = useTransform(scrollYProgress, [0, 1], ['210px', '0px'])
+  const cardBottom = useTransform(scrollYProgress, [0, 1], ['96px', '0px'])
   const cardRight  = useTransform(scrollYProgress, [0, 1], ['1.5%', '0%'])
   const cardRadius = useTransform(scrollYProgress, [0, 0.8], ['24px', '0px'])
 
