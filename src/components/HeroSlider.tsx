@@ -371,8 +371,8 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
     offset: ['start start', 'end end'],
   })
 
-  // Animation completes at 0.45 → 55% of 280vh (~154vh) dwell at full-screen
-  // so the user clearly sees the expanded video before the page scrolls away.
+  // h-[380vh] → sticky period = 280vh. Animation plays over same 126vh as original
+  // (keyframes scaled ×0.6429 so visual speed is identical), then 154vh hold at full-screen.
   const cardTop    = useTransform(scrollYProgress, [0, 0.45], ['80px', '0px'])
   const cardRight  = useTransform(scrollYProgress, [0, 0.45], ['2%', '0%'])
   const cardBottom = useTransform(scrollYProgress, [0, 0.45], ['50px', '0px'])
@@ -380,9 +380,9 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
   const cardRadius = useTransform(scrollYProgress, [0, 0.35], ['24px', '0px'])
   const textOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0])
   const textX       = useTransform(scrollYProgress, [0, 0.22], [0, -50])
-  const overlayOp   = useTransform(scrollYProgress, [0.4, 0.55], [0, 1])
+  const overlayOp   = useTransform(scrollYProgress, [0.42, 0.55], [0, 1])
   return (
-    <div ref={containerRef} className="relative h-[280vh]">
+    <div ref={containerRef} className="relative h-[380vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-white">
 
         {/* Sol metin */}
