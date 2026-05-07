@@ -223,21 +223,27 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
     document.documentElement.style.scrollBehavior = 'auto'
 
     const onWheel = (e: WheelEvent) => {
-      // Once animation is complete, let browser handle scroll normally
+      // Re-lock: user scrolled back to top and is scrolling UP → reverse animation
+      if (unlockedRef.current && window.scrollY < 5 && e.deltaY < 0) {
+        unlockedRef.current = false
+        // Fall through to handle as locked (animation reverses)
+      }
+
+      // If unlocked (animation done, page is free to scroll), let browser handle normally
       if (unlockedRef.current) return
 
       e.preventDefault()
 
       // Normalize delta across deltaMode values
       let delta = e.deltaY
-      if (e.deltaMode === 1) delta *= 40   // lines → px
+      if (e.deltaMode === 1) delta *= 40          // lines → px
       if (e.deltaMode === 2) delta *= window.innerHeight // pages → px
 
       const newP = Math.max(0, Math.min(1, progressRef.current + delta / SCROLL_BUDGET))
       progressRef.current = newP
       scrollYProgress.set(newP)
 
-      // Animation complete — release scroll lock
+      // Animation complete → release scroll lock so page can scroll down
       if (newP >= 1) unlockedRef.current = true
     }
 
