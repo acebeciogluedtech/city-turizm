@@ -378,17 +378,15 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
     offset: ['start start', 'end end'],
   })
 
-  // ── Video reveal via clipPath ──
-  // The video is always rendered at full viewport size (inset:0).
-  // We use clipPath: inset(top right bottom left round radius) to mask it.
-  // Initially: only the right ~55% is visible (left clipped at 43%).
-  // On scroll: left clip moves from 43% → 0%, top/bottom insets shrink, radius flattens.
-  // This ensures the video content is ALWAYS fully visible within the revealed window.
-  const clipLeft   = useTransform(scrollYProgress, [0, 0.45], [43, 0])   // % from left
-  const clipTop    = useTransform(scrollYProgress, [0, 0.45], [5, 0])    // % from top  (≈ 80px on 1080p)
-  const clipBottom = useTransform(scrollYProgress, [0, 0.45], [3.5, 0])  // % from bottom (≈ 50px)
-  const clipRight  = useTransform(scrollYProgress, [0, 0.45], [1.5, 0])  // % from right (≈ 2%)
-  const clipRadius = useTransform(scrollYProgress, [0, 0.35], [24, 0])   // px border-radius
+  // ── BAU Campus style: video card positioned with right:0 fixed, left transitions ──
+  // The card is absolutely positioned with right always at the right edge.
+  // `left` starts at 43% (making the card ~57% wide) and transitions to 0% (full width).
+  // This creates a natural left-expansion effect.
+  const cardLeft   = useTransform(scrollYProgress, [0, 0.45], ['43%', '0%'])
+  const cardTop    = useTransform(scrollYProgress, [0, 0.45], ['70px', '0px'])
+  const cardBottom = useTransform(scrollYProgress, [0, 0.45], ['40px', '0px'])
+  const cardRight  = useTransform(scrollYProgress, [0, 0.45], ['1.5%', '0%'])
+  const cardRadius = useTransform(scrollYProgress, [0, 0.35], ['24px', '0px'])
 
   // Left-side text fades out and slides left as video expands over it
   const textOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0])
@@ -431,16 +429,17 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
           </div>
         </motion.div>
 
-        {/* Sağ video — tam ekran boyutunda render edilir, clipPath ile sağdan sola açılır */}
+        {/* Sağ video kart — right:0 sabit, left animasyonla 43% → 0% geçiş yapar */}
         <motion.div
-          className="absolute inset-0 z-20"
           style={{
-            clipPath: useTransform(
-              [clipTop, clipRight, clipBottom, clipLeft, clipRadius] as MotionValue[],
-              ([t, r, b, l, rad]: number[]) =>
-                `inset(${t}% ${r}% ${b}% ${l}% round ${rad}px)`
-            ),
+            left: cardLeft,
+            right: cardRight,
+            top: cardTop,
+            bottom: cardBottom,
+            borderRadius: cardRadius,
+            willChange: 'left, right, top, bottom, border-radius',
           }}
+          className="absolute z-20 overflow-hidden shadow-2xl shadow-black/15"
         >
           <VideoFrame />
 
