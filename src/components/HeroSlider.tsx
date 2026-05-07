@@ -246,8 +246,9 @@ function MobileHero({ onApply }: { onApply: () => void }) {
   const desc  = useC('hero.description', "1985'ten bu yana binlerce yolcuya eşlik eden City Turizm, yurt içi ve yurt dışı turlardan balayı paketlerine kadar geniş portföyüyle her seyahati özel bir deneyime dönüştürür. Güvenilir hizmet anlayışımız ve uzman rehber kadromuzla sizi dünyanın dört bir yanına taşıyoruz.")
   const cta   = useC('hero.cta_button', 'Hemen Başvur')
 
-  const playerRef  = useRef<any>(null)
-  const [isPlaying, setIsPlaying] = useState(true)
+  const playerRef   = useRef<any>(null)
+  const [isPlaying, setIsPlaying]   = useState(true)
+  const [videoReady, setVideoReady] = useState(false)
 
   function togglePlay() {
     const p = playerRef.current
@@ -256,15 +257,24 @@ function MobileHero({ onApply }: { onApply: () => void }) {
     else           { p.playVideo();  setIsPlaying(true)  }
   }
 
+  // Cover hides YouTube's native title/play button overlay:
+  // shown while loading, and when the user has paused
+  const showCover = !videoReady || !isPlaying
+
   const titleParts = title.split(/(?<=\.)\s*/)
 
   return (
     <section className="lg:hidden bg-white pt-[72px]">
       <div className="relative mx-4 mt-4 rounded-2xl overflow-hidden shadow-xl"
            style={{ height: '56vw', minHeight: 220 }}>
-        <VideoFrame onPlayerReady={(p) => { playerRef.current = p }} />
+        <VideoFrame onPlayerReady={(p) => { playerRef.current = p; setVideoReady(true) }} />
 
-        {/* Play / Pause button — mobile only */}
+        {/* Black cover: hides YouTube native title/play UI while loading or paused */}
+        {showCover && (
+          <div className="absolute inset-0 z-20 bg-black" />
+        )}
+
+        {/* Play / Pause button — always on top */}
         <button
           onClick={togglePlay}
           aria-label={isPlaying ? 'Videoyu durdur' : 'Videoyu oynat'}
@@ -361,7 +371,6 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
     offset: ['start start', 'end end'],
   })
 
-  const CARD_GAP   = 20
   const cardTop    = useTransform(scrollYProgress, [0, 0.7], ['80px', '0px'])
   const cardRight  = useTransform(scrollYProgress, [0, 0.7], ['2%', '0%'])
   const cardBottom = useTransform(scrollYProgress, [0, 0.7], ['50px', '0px'])
@@ -370,9 +379,6 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
   const textOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0])
   const textX       = useTransform(scrollYProgress, [0, 0.35], [0, -50])
   const overlayOp   = useTransform(scrollYProgress, [0.65, 0.85], [0, 1])
-  // Scroll indicator: appear early as user starts scrolling, visible through fullscreen, fade at end
-  const scrollIndicatorOp = useTransform(scrollYProgress, [0.15, 0.25, 0.9, 1], [0, 1, 1, 0])
-
   return (
     <div ref={containerRef} className="relative h-[280vh]">
       <div className="sticky top-0 h-screen overflow-hidden bg-white">
