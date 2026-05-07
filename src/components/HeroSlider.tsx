@@ -177,7 +177,7 @@ function extractYouTubeId(input: string): string {
 }
 
 // ── YouTube Player ──
-function VideoFrame() {
+function VideoFrame({ onPlayerReady }: { onPlayerReady?: (player: any) => void } = {}) {
   const rawVideoId = useC('hero.video_id', 'Qg5T7fZ3Q_4')
   const videoId = extractYouTubeId(rawVideoId)
   const divId = useId().replace(/:/g, '_')
@@ -198,7 +198,11 @@ function VideoFrame() {
           playsinline: 1, iv_load_policy: 3, disablekb: 1, start: 15,
         },
         events: {
-          onReady: (e: any) => { e.target.setPlaybackQuality('hd1080'); e.target.playVideo() },
+          onReady: (e: any) => {
+            e.target.setPlaybackQuality('hd1080')
+            e.target.playVideo()
+            onPlayerReady?.(e.target)
+          },
           onPlaybackQualityChange: (e: any) => {
             const q = e.target.getPlaybackQuality()
             if (!['hd1080','hd1440','hd2160'].includes(q)) e.target.setPlaybackQuality('hd1080')
@@ -242,16 +246,47 @@ function MobileHero({ onApply }: { onApply: () => void }) {
   const desc  = useC('hero.description', "1985'ten bu yana binlerce yolcuya eşlik eden City Turizm, yurt içi ve yurt dışı turlardan balayı paketlerine kadar geniş portföyüyle her seyahati özel bir deneyime dönüştürür. Güvenilir hizmet anlayışımız ve uzman rehber kadromuzla sizi dünyanın dört bir yanına taşıyoruz.")
   const cta   = useC('hero.cta_button', 'Hemen Başvur')
 
-  // Split title by period/newline for line breaks
+  const playerRef  = useRef<any>(null)
+  const [isPlaying, setIsPlaying] = useState(true)
+
+  function togglePlay() {
+    const p = playerRef.current
+    if (!p) return
+    if (isPlaying) { p.pauseVideo(); setIsPlaying(false) }
+    else           { p.playVideo();  setIsPlaying(true)  }
+  }
+
   const titleParts = title.split(/(?<=\.)\s*/)
 
   return (
-    <section className="lg:hidden bg-white pt-[108px]">
+    <section className="lg:hidden bg-white pt-[72px]">
       <div className="relative mx-4 mt-4 rounded-2xl overflow-hidden shadow-xl"
            style={{ height: '56vw', minHeight: 220 }}>
-        <VideoFrame />
+        <VideoFrame onPlayerReady={(p) => { playerRef.current = p }} />
         <div className="absolute inset-x-0 bottom-0 h-20
                         bg-gradient-to-t from-black/50 to-transparent z-20 pointer-events-none" />
+
+        {/* Play / Pause button — mobile only */}
+        <button
+          onClick={togglePlay}
+          aria-label={isPlaying ? 'Videoyu durdur' : 'Videoyu oynat'}
+          className="absolute bottom-3 right-3 z-30 flex items-center justify-center
+                     w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm
+                     text-white hover:bg-black/70 active:scale-90 transition-all"
+        >
+          {isPlaying ? (
+            /* Pause icon */
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+              <rect x="6" y="4" width="4" height="16" rx="1"/>
+              <rect x="14" y="4" width="4" height="16" rx="1"/>
+            </svg>
+          ) : (
+            /* Play icon */
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+              <path d="M8 5.14v14.72a1 1 0 001.5.86l11-7.36a1 1 0 000-1.72l-11-7.36A1 1 0 008 5.14z"/>
+            </svg>
+          )}
+        </button>
       </div>
 
       <div className="px-5 pt-7 pb-6">
