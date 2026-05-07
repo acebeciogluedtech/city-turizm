@@ -298,8 +298,8 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
 
   // Video card: right edge anchored, left edge moves 43% → 0%
   const cardLeft   = useTransform(scrollYProgress, [0, 1], ['43%', '0%'])
-  const cardTop    = useTransform(scrollYProgress, [0, 1], ['244px', '0px'])
-  const cardBottom = useTransform(scrollYProgress, [0, 1], ['120px', '0px'])
+  const cardTop    = useTransform(scrollYProgress, [0, 1], ['272px', '0px'])
+  const cardBottom = useTransform(scrollYProgress, [0, 1], ['148px', '0px'])
   const cardRight  = useTransform(scrollYProgress, [0, 1], ['1.5%', '0%'])
   const cardRadius = useTransform(scrollYProgress, [0, 0.8], ['24px', '0px'])
 
