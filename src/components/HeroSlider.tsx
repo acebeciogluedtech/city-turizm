@@ -119,6 +119,8 @@ function VideoFrame({ onPlayerReady }: { onPlayerReady?: (p: any) => void } = {}
   const rawVideoId = useC('hero.video_id', 'Qg5T7fZ3Q_4')
   const videoId = extractYouTubeId(rawVideoId)
   const pid = `yt_${useId().replace(/:/g, '_')}`
+  const [isReady, setIsReady] = useState(false)
+
   useEffect(() => {
     if (typeof window === 'undefined') return
     if (!window._ytPlayers) window._ytPlayers = {}
@@ -129,21 +131,17 @@ function VideoFrame({ onPlayerReady }: { onPlayerReady?: (p: any) => void } = {}
         videoId,
         playerVars: {
           autoplay: 1, mute: 1, loop: 1, playlist: videoId,
-          controls: 0,       // no controls bar
-          disablekb: 1,      // no keyboard shortcuts
-          fs: 0,             // no fullscreen button
-          rel: 0,            // no related videos
-          showinfo: 0,       // no title
-          modestbranding: 1, // minimal branding
-          iv_load_policy: 3, // no annotations
-          playsinline: 1,
-          start: 15,
+          controls: 0, disablekb: 1, fs: 0, rel: 0,
+          showinfo: 0, modestbranding: 1, iv_load_policy: 3,
+          playsinline: 1, start: 15,
         },
         events: {
           onReady: (e: any) => {
             e.target.setPlaybackQuality('hd1080')
             e.target.playVideo()
             onPlayerReady?.(e.target)
+            // Short delay before revealing video — ensures first frame is shown
+            setTimeout(() => setIsReady(true), 300)
           },
           onPlaybackQualityChange: (e: any) => {
             if (!['hd1080','hd1440','hd2160'].includes(e.target.getPlaybackQuality()))
@@ -158,9 +156,8 @@ function VideoFrame({ onPlayerReady }: { onPlayerReady?: (p: any) => void } = {}
   }, [pid, videoId])
 
   return (
-    // overflow-hidden clips the iframe edges where YouTube watermark/UI appears
     <div className="absolute inset-0 bg-black overflow-hidden">
-      {/* Iframe is slightly oversized — the 8px bleed on each side clips YouTube's logo */}
+      {/* Iframe slightly oversized — clips YouTube's watermark at edges */}
       <div style={{ position: 'absolute', inset: '-8px', overflow: 'hidden' }}>
         <div
           id={pid}
@@ -174,8 +171,13 @@ function VideoFrame({ onPlayerReady }: { onPlayerReady?: (p: any) => void } = {}
           }}
         />
       </div>
-      {/* Full-cover transparent overlay — blocks all mouse interaction with iframe */}
+      {/* Transparent overlay — blocks all mouse interaction (no hover UI from YouTube) */}
       <div className="absolute inset-0 z-10" style={{ cursor: 'default' }} />
+      {/* Black cover — hides YouTube's native play button / loading UI until video plays */}
+      <div
+        className="absolute inset-0 z-20 bg-black transition-opacity duration-500"
+        style={{ opacity: isReady ? 0 : 1, pointerEvents: 'none' }}
+      />
     </div>
   )
 }
