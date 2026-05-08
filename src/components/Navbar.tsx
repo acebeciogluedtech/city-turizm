@@ -437,7 +437,7 @@ export default function Navbar() {
       {/* ── MAIN NAVBAR ── */}
       <nav className={cn(
         'fixed left-0 right-0 z-50 transition-all duration-300 bg-white border-b border-gray-100',
-        'top-0 lg:top-[44px]',
+        'top-0 lg:top-[40px]',
         isScrolled && 'shadow-md'
       )}>
         <div className="container mx-auto px-6">

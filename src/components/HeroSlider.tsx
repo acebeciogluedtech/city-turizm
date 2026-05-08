@@ -199,7 +199,7 @@ function MobileHero({ onApply }: { onApply: () => void }) {
   const titleParts = title.split(/(?<=\.)\s*/)
   return (
     <section className="lg:hidden bg-white pt-[72px]">
-      <div className="relative mx-4 mt-4 rounded-2xl overflow-hidden shadow-xl" style={{ height: '56vw', minHeight: 220 }}>
+      <div className="relative mx-4 mt-4 rounded-2xl overflow-hidden shadow-xl" style={{ height: '112vw', minHeight: 440 }}>
         <VideoFrame onPlayerReady={(p) => { playerRef.current = p; setVideoReady(true) }} />
         {(!videoReady || !isPlaying) && <div className="absolute inset-0 z-20 bg-black" />}
         <button onClick={() => { const p = playerRef.current; if (!p) return; if (isPlaying) { p.pauseVideo(); setIsPlaying(false) } else { p.playVideo(); setIsPlaying(true) } }}
