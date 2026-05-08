@@ -11,7 +11,7 @@ export default function SiteLayout({
   return (
     <LanguageProvider>
       <Navbar />
-      <main>{children}</main>
+      <main className="overflow-x-hidden">{children}</main>
       <Footer />
       <WhatsAppButton />
     </LanguageProvider>

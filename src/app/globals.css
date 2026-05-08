@@ -21,7 +21,7 @@ a > span > img {
 }
 
 html {
-  /* overflow-x:hidden removed — it clips absolutely positioned card shadows */
+  overflow-x: clip; /* clip prevents lateral scroll without creating a BFC — card shadows stay visible */
 }
 
 /* ── Body ── */

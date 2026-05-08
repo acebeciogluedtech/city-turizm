@@ -261,7 +261,7 @@ function MobileHero({ onApply }: { onApply: () => void }) {
   const titleParts = title.split(/(?<=\.)\s*/)
 
   return (
-    <section className="lg:hidden bg-white pt-[72px]">
+    <section className="lg:hidden bg-white pt-[72px] overflow-x-hidden">
 
       {/* 16:9 yatay (landscape) video bandı */}
       <div className="relative mx-4 mt-4 rounded-2xl overflow-hidden shadow-xl" style={{ paddingBottom: '56.25%', height: 0 }}>

@@ -81,7 +81,7 @@ export default function ReferencesSection({ contentTr, contentEn }: Props) {
   const v = (key: string, fallback = '') => c[key] || contentTr[key] || fallback
 
   return (
-    <section ref={ref} className="bg-gray-50/80 py-16 md:py-20">
+    <section ref={ref} className="bg-gray-50/80 py-16 md:py-20 overflow-x-hidden">
       {/* Header */}
       <div className="container mx-auto px-4 md:px-6 mb-12 text-center">
         <div className={`transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
