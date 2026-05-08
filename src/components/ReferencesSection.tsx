@@ -88,7 +88,7 @@ export default function ReferencesSection({ contentTr, contentEn }: Props) {
           <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20
                           rounded-full px-4 py-1.5 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-            <span className="text-amber-600 text-xs font-bold uppercase tracking-widest">
+            <span className="text-amber-600 text-xs font-bold tracking-widest">
               {v('references.badge', 'Güvenilir Markalar')}
             </span>
           </div>

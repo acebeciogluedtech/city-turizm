@@ -67,7 +67,7 @@ export default function ContactSection({ contentTr, contentEn }: Props) {
             <div className="inline-flex items-center gap-2 bg-white/20 border border-white/30
                             rounded-full px-4 py-1.5 mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              <span className="text-white text-xs font-bold uppercase tracking-widest">
+              <span className="text-white text-xs font-bold tracking-widest">
                 {v('contact.badge', 'İletişim')}
               </span>
             </div>
@@ -99,7 +99,7 @@ export default function ContactSection({ contentTr, contentEn }: Props) {
                 </div>
 
                 {/* Label */}
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">
+                <p className="text-[10px] font-bold text-gray-400 tracking-widest mb-1.5">
                   {ci.label}
                 </p>
 

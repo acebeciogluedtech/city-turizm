@@ -19,7 +19,7 @@ export default function Destinations() {
             className="flex items-center justify-center gap-2 mb-3"
           >
             <div className="w-8 h-0.5 bg-amber-600" />
-            <span className="text-amber-600 text-sm font-semibold uppercase tracking-widest">Destinasyonlar</span>
+            <span className="text-amber-600 text-sm font-semibold tracking-widest">DESTİNASYONLAR</span>
             <div className="w-8 h-0.5 bg-amber-600" />
           </motion.div>
           <motion.h2

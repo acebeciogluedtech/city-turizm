@@ -48,7 +48,7 @@ export default function Testimonials({ contentTr, contentEn }: Props) {
           <div className="inline-flex items-center gap-2 bg-white/20 border border-white/30
                           rounded-full px-4 py-1.5 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-white" />
-            <span className="text-white text-xs font-bold uppercase tracking-widest">
+            <span className="text-white text-xs font-bold tracking-widest">
               {v('testimonials.badge', lang === 'tr' ? 'Görüşler' : 'Reviews')}
             </span>
           </div>

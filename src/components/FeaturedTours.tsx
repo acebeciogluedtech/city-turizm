@@ -29,7 +29,7 @@ export default function FeaturedTours() {
               className="flex items-center gap-2 mb-3"
             >
               <div className="w-8 h-0.5 bg-amber-600" />
-              <span className="text-amber-600 text-sm font-semibold uppercase tracking-widest">Tur Paketleri</span>
+              <span className="text-amber-600 text-sm font-semibold tracking-widest">TUR PAKETLERİ</span>
             </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}

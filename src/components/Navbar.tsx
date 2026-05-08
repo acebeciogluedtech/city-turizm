@@ -156,7 +156,7 @@ function KurumsalMega({ items }: { items: { label: string; href: string; desc?: 
       <div className="grid grid-cols-3 divide-x divide-gray-100">
         {grouped.map(({ title, items: gItems }) => (
           <div key={title} className="py-4">
-            <p className="px-5 pb-2 text-[10px] font-bold uppercase tracking-widest text-amber-500">
+            <p className="px-5 pb-2 text-[10px] font-bold tracking-widest text-amber-500">
               {title}
             </p>
             {gItems.map(item => {

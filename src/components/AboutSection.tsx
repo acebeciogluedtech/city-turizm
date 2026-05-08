@@ -42,7 +42,7 @@ export default function AboutSection({ contentTr, contentEn }: Props) {
 
   return (
     <section ref={ref}>
-      <div className="grid lg:grid-cols-2">
+      <div className="grid lg:grid-cols-2 items-stretch">
 
         {/* ── LEFT: about text ── */}
         <motion.div
@@ -54,7 +54,7 @@ export default function AboutSection({ contentTr, contentEn }: Props) {
           <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200
                           rounded-full px-4 py-1.5 mb-6 self-start">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-            <span className="text-amber-600 text-xs font-bold uppercase tracking-widest">
+            <span className="text-amber-600 text-xs font-bold tracking-widest">
               {v('about.badge', 'Hakkımızda & Hizmetlerimiz')}
             </span>
           </div>
@@ -93,14 +93,14 @@ export default function AboutSection({ contentTr, contentEn }: Props) {
         </motion.div>
 
         {/* ── RIGHT: 2×3 service cards ── */}
-        <div className="grid grid-cols-2 gap-0" style={{ gridTemplateRows: 'repeat(3, 1fr)' }}>
+        <div className="grid grid-cols-2 gap-0 h-full" style={{ gridTemplateRows: 'repeat(3, 1fr)' }}>
           {services.map((s, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.45, delay: 0.1 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="relative overflow-hidden group h-full min-h-[160px]"
+              className="relative overflow-hidden group min-h-[180px]"
             >
               <Link href={s.href} className="absolute inset-0 z-10" aria-label={s.label} />
               {s.image && (

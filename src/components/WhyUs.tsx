@@ -63,7 +63,7 @@ export default function WhyUs() {
             className="flex items-center justify-center gap-2 mb-3"
           >
             <div className="w-8 h-0.5 bg-amber-500" />
-            <span className="text-amber-400 text-sm font-semibold uppercase tracking-widest">Neden Biz?</span>
+            <span className="text-amber-400 text-sm font-semibold tracking-widest">NEDEN BİZ?</span>
             <div className="w-8 h-0.5 bg-amber-500" />
           </motion.div>
           <motion.h2
