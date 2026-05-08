@@ -358,7 +358,7 @@ function DesktopHero({ onApply }: { onApply: () => void }) {
 
   // Card: right-side rectangle → full screen
   const CARD_TOP    = '132px'
-  const CARD_BOTTOM = '80px'
+  const CARD_BOTTOM = '132px'
   const CARD_LEFT   = '44%'
   const CARD_RIGHT  = '2%'
 
