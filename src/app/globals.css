@@ -65,6 +65,11 @@ body {
   animation: fadeIn 0.5s ease-out;
 }
 
+@keyframes loading-dot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%           { transform: scale(1);   opacity: 1;   }
+}
+
 @keyframes loading-bar {
   0%   { left: -33%; }
   50%  { left: 50%; }
